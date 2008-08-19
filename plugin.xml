@@ -22,5 +22,19 @@
             file="contexts.xml">
       </contexts>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.hephaestus.http.preferences.HttpPreferencePage"
+            id="com.hephaestus.http.preferences.HttpPreferencePage"
+            name="Http Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.hephaestus.http.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

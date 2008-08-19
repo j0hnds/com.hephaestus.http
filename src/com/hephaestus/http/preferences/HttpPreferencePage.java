@@ -1,0 +1,201 @@
+package com.hephaestus.http.preferences;
+
+import java.util.regex.Pattern;
+
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.preference.*;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import com.hephaestus.http.Activator;
+
+public class HttpPreferencePage
+	extends FieldEditorPreferencePage
+	implements IWorkbenchPreferencePage {
+	
+	private static final Pattern RE_HOST_PORT = Pattern.compile("^[^:]+:[0-9]+$"); 
+	private Table tblHostPorts;
+
+	public HttpPreferencePage() {
+		super(GRID);
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setDescription("HTTP Preferences");
+	}
+	
+	/**
+	 * Creates the field editors. Field editors are abstractions of
+	 * the common GUI blocks needed to manipulate various types
+	 * of preferences. Each field editor knows how to save and
+	 * restore itself.
+	 */
+	public void createFieldEditors() {
+		Composite parent = new Composite(getFieldEditorParent(), SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		parent.setLayout(layout);
+		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		Label lblHostPorts = new Label(parent, SWT.NONE);
+		lblHostPorts.setText("Registered Servers:");
+		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		gd.horizontalSpan = 2;
+		lblHostPorts.setLayoutData(gd);
+		
+		tblHostPorts = new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		tblHostPorts.setHeaderVisible(true);
+		tblHostPorts.setLinesVisible(true);
+		gd = new GridData(SWT.FILL, SWT.TOP, true, false);
+		gd.heightHint = 200;
+		tblHostPorts.setLayoutData(gd);
+		
+		// Set up the columns
+		TableColumn col = new TableColumn(tblHostPorts, SWT.NONE);
+		col.setText("Host");
+		col.setWidth(100);
+		
+		col = new TableColumn(tblHostPorts, SWT.NONE);
+		col.setText("Port");
+		col.setWidth(100);
+		
+		loadHostPortsTable();
+		
+		// Now, set up the buttons for working with the data
+		Composite buttons = new Composite(parent, SWT.NONE);
+		gd = new GridData(SWT.CENTER, SWT.TOP, true, false);
+		buttons.setLayoutData(gd);
+		RowLayout btnLayout = new RowLayout(SWT.VERTICAL);
+		buttons.setLayout(btnLayout);
+		
+		Button btnAdd = new Button(buttons, SWT.PUSH);
+		btnAdd.setText("Add");
+		btnAdd.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				addHostPortRow();
+			}
+			
+		});
+		
+		Button btnDel = new Button(buttons, SWT.PUSH);
+		btnDel.setText("Delete");
+		btnDel.addSelectionListener(new SelectionListener() {
+			
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				deleteSelectedHostPortRows();
+			}
+			
+		});
+		
+		parent.pack();
+		
+	}
+
+	protected void addHostPortRow() {
+		InputDialog dlg = new InputDialog(getShell(), "Http Preferences", "Enter the desired host:port", "", new IInputValidator() {
+
+			public String isValid(String newText) {
+				String errorMessage = null;
+				if (newText == null || newText.length() == 0) {
+					errorMessage = "Must specify host:port";
+				}
+				
+				if (! RE_HOST_PORT.matcher(newText).matches()) {
+					errorMessage = "Entry must be of the form host:port";
+				}
+				return errorMessage;
+			}
+			
+		});
+		dlg.setBlockOnOpen(true);
+		int status = dlg.open();
+		if (status == 0) {
+			String hostPort = dlg.getValue();
+			String[] cmps = hostPort.split(":");
+			TableItem ti = new TableItem(tblHostPorts, SWT.NONE);
+			ti.setText(cmps);
+		}
+	}
+
+	protected void deleteSelectedHostPortRows() {
+		tblHostPorts.remove(tblHostPorts.getSelectionIndices());
+	}
+
+	private void loadHostPortsTable() {
+		IPreferenceStore store = getPreferenceStore();
+		
+		String hostPorts = store.getString(PreferenceConstants.P_HOST_PORTS);
+		
+		loadHostPorts(hostPorts);
+	}
+
+	@Override
+	protected void performDefaults() {
+		loadDefaultHostPorts();
+		super.performDefaults();
+	}
+
+	@Override
+	public boolean performOk() {
+		StringBuilder sb = new StringBuilder();
+		boolean firstItem = true;
+		for (TableItem ti : tblHostPorts.getItems()) {
+			if (! firstItem) {
+				sb.append("|");
+			}
+			sb.append(ti.getText(0));
+			sb.append(":");
+			sb.append(ti.getText(1));
+			firstItem = false;
+		}
+		
+		IPreferenceStore store = getPreferenceStore();
+		store.setValue(PreferenceConstants.P_HOST_PORTS, sb.toString());
+		
+		return super.performOk();
+	}
+
+	private void loadDefaultHostPorts() {
+		IPreferenceStore store = this.getPreferenceStore();
+		String hp = store.getDefaultString(PreferenceConstants.P_HOST_PORTS);
+		
+		loadHostPorts(hp);
+	}
+
+	private void loadHostPorts(String hp) {
+		tblHostPorts.removeAll();
+		// Split the string on the '|' symbol
+		String[] hostPorts = hp.split("\\|");
+		for (String hostPort : hostPorts) {
+			String[] cmps = hostPort.split(":");
+			TableItem ti = new TableItem(tblHostPorts, SWT.NONE);
+			ti.setText(cmps);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 */
+	public void init(IWorkbench workbench) {
+	}
+	
+}
