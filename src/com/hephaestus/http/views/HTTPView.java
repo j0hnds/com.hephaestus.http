@@ -57,7 +57,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	private Action invokeURLAction;
 	private Combo cbProtocol;
 	private Combo cbHostPort;
-	private Text tfURI;
+	private Combo cbURI;
 	private Combo cbVerbs;
 	private Table tblRequestHeaders;
 	private Table tblRequestPostData;
@@ -148,7 +148,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		TabItem item = new TabItem(tabs, SWT.NONE);
 		item.setText("Data");
 
-		tfResultData = new Text(tabs, SWT.BORDER | SWT.MULTI);
+		tfResultData = new Text(tabs, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		item.setControl(tfResultData);
 	}
@@ -194,8 +194,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 		cbVerbs = new Combo(entry, SWT.BORDER | SWT.READ_ONLY);
 		cbVerbs.setItems(VERBS);
-		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		cbVerbs.setLayoutData(gd);
+		cbVerbs.select(0);
 
 		createInputDataFields(entry);
 	}
@@ -465,6 +466,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		// Drop-down for protocols
 		cbProtocol = new Combo(fields, SWT.BORDER | SWT.READ_ONLY);
 		cbProtocol.setItems(PROTOCOLS);
+		cbProtocol.select(0);
 
 		Label lblFirstDelimiter = new Label(fields, SWT.NONE);
 		lblFirstDelimiter.setText("://");
@@ -478,10 +480,10 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		Label lblSecondDelimiter = new Label(fields, SWT.NONE);
 		lblSecondDelimiter.setText("/");
 
-		tfURI = new Text(fields, SWT.BORDER | SWT.SINGLE);
+		cbURI = new Combo(fields, SWT.BORDER);
 		rd = new RowData();
 		rd.width = 200;
-		tfURI.setLayoutData(rd);
+		cbURI.setLayoutData(rd);
 	}
 
 	private void hookContextMenu() {
@@ -564,7 +566,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		cbProtocol.setFocus();
+		cbURI.setFocus();
 	}
 
 	// Implementation of HTTPViewData
@@ -598,7 +600,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		sb.append("://");
 		sb.append(cbHostPort.getText());
 		sb.append("/");
-		sb.append(tfURI.getText());
+		sb.append(cbURI.getText());
 
 		return sb.toString();
 	}
@@ -619,6 +621,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	public void setStatus(String status) {
 		tfStatus.setText(status);
+		// If we got here, we didn't get an error, so save off the 
+		// value of the URI we used in the combo box.
+		String uri = cbURI.getText();
+		if (cbURI.indexOf(uri) < 0) {
+			cbURI.add(uri);
+		}
 	}
 
 	public String getVerb() {
@@ -641,6 +649,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 		String hpString = store.getString(PreferenceConstants.P_HOST_PORTS);
 		cbHostPort.setItems(hpString.split("\\|"));
+		if (cbHostPort.getItemCount() > 0) {
+			cbHostPort.select(0);
+		}
 	}
 
 }

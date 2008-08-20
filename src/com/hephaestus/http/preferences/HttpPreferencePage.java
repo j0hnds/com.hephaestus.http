@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import com.hephaestus.http.Activator;
@@ -27,6 +28,7 @@ public class HttpPreferencePage
 	
 	private static final Pattern RE_HOST_PORT = Pattern.compile("^[^:]+:[0-9]+$"); 
 	private Table tblHostPorts;
+	private Text tfProxy;
 
 	public HttpPreferencePage() {
 		super(GRID);
@@ -106,8 +108,26 @@ public class HttpPreferencePage
 			
 		});
 		
+		Label lblProxy = new Label(parent, SWT.NONE);
+		lblProxy.setText("Proxy:");
+		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblProxy.setLayoutData(gd);
+		
+		tfProxy = new Text(parent, SWT.BORDER | SWT.SINGLE);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		tfProxy.setLayoutData(gd);
+		
+		loadProxy();
+		
 		parent.pack();
 		
+	}
+
+	private void loadProxy() {
+		IPreferenceStore store = getPreferenceStore();
+		
+		String proxy = store.getString(PreferenceConstants.P_PROXY_HOST_PORT);
+		tfProxy.setText(proxy);
 	}
 
 	protected void addHostPortRow() {
@@ -151,7 +171,14 @@ public class HttpPreferencePage
 	@Override
 	protected void performDefaults() {
 		loadDefaultHostPorts();
+		loadDefaultProxy();
 		super.performDefaults();
+	}
+
+	private void loadDefaultProxy() {
+		IPreferenceStore store = this.getPreferenceStore();
+		String proxy = store.getDefaultString(PreferenceConstants.P_PROXY_HOST_PORT);
+		tfProxy.setText(proxy);
 	}
 
 	@Override
@@ -170,6 +197,8 @@ public class HttpPreferencePage
 		
 		IPreferenceStore store = getPreferenceStore();
 		store.setValue(PreferenceConstants.P_HOST_PORTS, sb.toString());
+		
+		store.setValue(PreferenceConstants.P_PROXY_HOST_PORT, tfProxy.getText());
 		
 		return super.performOk();
 	}
@@ -196,6 +225,17 @@ public class HttpPreferencePage
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
+	}
+
+	@Override
+	public boolean isValid() {
+		String proxy = tfProxy.getText();
+		if (proxy != null && proxy.length() > 0) {
+			if (! RE_HOST_PORT.matcher(proxy).matches()) {
+				return false;
+			}
+		}
+		return super.isValid();
 	}
 	
 }

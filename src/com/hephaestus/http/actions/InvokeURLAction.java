@@ -19,14 +19,20 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.util.EncodingUtil;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.hephaestus.http.Activator;
+import com.hephaestus.http.preferences.PreferenceConstants;
 import com.hephaestus.http.views.HTTPViewData;
 
 public class InvokeURLAction extends Action {
 
+	private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
+	private static final String FORM_ENCODING = "UTF-8";
+	
 	private HTTPViewData viewData;
 
 	public InvokeURLAction(HTTPViewData viewData) {
@@ -35,6 +41,18 @@ public class InvokeURLAction extends Action {
 		setToolTipText("Invoke HTTP Request");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+	}
+	
+	private HttpClient getClient() {
+		HttpClient client = new HttpClient();
+		Preferences prefs = Activator.getDefault().getPluginPreferences();
+		String proxy = prefs.getString(PreferenceConstants.P_PROXY_HOST_PORT);
+		if (proxy != null && proxy.length() > 0) {
+			String[] cmps = proxy.split(":");
+			client.getHostConfiguration().setProxy(cmps[0], Integer.parseInt(cmps[1]));
+		}
+		
+		return client;
 	}
 
 	@Override
@@ -58,7 +76,7 @@ public class InvokeURLAction extends Action {
 
 	private void invokeDELETE() {
 		String url = viewData.getURL();
-		HttpClient client = new HttpClient();
+		HttpClient client = getClient();
 		DeleteMethod method = new DeleteMethod(url);
 		populateMethodHeaders(method);
 
@@ -113,7 +131,7 @@ public class InvokeURLAction extends Action {
 
 	private void invokePUT() {
 		String url = viewData.getURL();
-		HttpClient client = new HttpClient();
+		HttpClient client = getClient();
 		PutMethod method = new PutMethod(url);
 		populateMethodHeaders(method);
 		try {
@@ -139,7 +157,7 @@ public class InvokeURLAction extends Action {
 		String bulkData = viewData.getBulkPostData();
 		if (bulkData != null && bulkData.length() > 0) {
 			method.setRequestEntity(new StringRequestEntity(bulkData,
-					"text/plain", "UTF-8"));
+					"text/plain", FORM_ENCODING));
 		}
 	}
 
@@ -152,17 +170,17 @@ public class InvokeURLAction extends Action {
 			NameValuePair[] pairs = new NameValuePair[count];
 			int index = 0;
 			for (Entry<String, String> entry : postDataFields.entrySet()) {
-				pairs[index] = new NameValuePair(entry.getKey(), entry
+				pairs[index++] = new NameValuePair(entry.getKey(), entry
 						.getValue());
 			}
-			method.setRequestEntity(new StringRequestEntity(EncodingUtil
-					.formUrlEncode(pairs, "UTF-8"), "text/plain", "UTF-8"));
+			String requestParams = EncodingUtil.formUrlEncode(pairs, FORM_ENCODING);
+			method.setRequestEntity(new StringRequestEntity(requestParams, FORM_CONTENT_TYPE, FORM_ENCODING));
 		}
 	}
 
 	private void invokePOST() {
 		String url = viewData.getURL();
-		HttpClient client = new HttpClient();
+		HttpClient client = getClient();
 		PostMethod method = new PostMethod(url);
 		populateMethodHeaders(method);
 		try {
@@ -185,7 +203,7 @@ public class InvokeURLAction extends Action {
 
 	private void invokeGET() {
 		String url = viewData.getURL();
-		HttpClient client = new HttpClient();
+		HttpClient client = getClient();
 		GetMethod method = new GetMethod(url);
 		populateMethodHeaders(method);
 
