@@ -65,6 +65,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	private Text tfFileUploadPath;
 	private Text tfStatus;
 	private Text tfResultData;
+	private Text tfContentType;
 	private Table tblResultHeaders;
 	private TableViewer tvRequestHeaders;
 	private TableViewer tvRequestPostData;
@@ -263,12 +264,29 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	private void createRequestBulkPostData(TabFolder tabs) {
+		Composite cmp = new Composite(tabs, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		cmp.setLayout(layout);
+		
 		TabItem item = new TabItem(tabs, SWT.NONE);
 		item.setText("Bulk POST Data");
 
-		tfBulkPostData = new Text(tabs, SWT.BORDER | SWT.MULTI);
+		Label lblContentType = new Label(cmp, SWT.NONE);
+		lblContentType.setText("Content Type:");
+		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblContentType.setLayoutData(gd);
+		
+		tfContentType = new Text(cmp, SWT.SINGLE | SWT.BORDER);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		tfContentType.setLayoutData(gd);
+		
+		tfBulkPostData = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.horizontalSpan = 2;
+		tfBulkPostData.setLayoutData(gd);
 
-		item.setControl(tfBulkPostData);
+		item.setControl(cmp);
 	}
 
 	private void createRequestPostData(TabFolder tabs) {
@@ -652,6 +670,14 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		if (cbHostPort.getItemCount() > 0) {
 			cbHostPort.select(0);
 		}
+	}
+
+	public String getContentType() {
+		return tfContentType.getText();
+	}
+
+	public void validateInputs() {
+		// TODO: Complete the validation.
 	}
 
 }

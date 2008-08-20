@@ -155,9 +155,10 @@ public class InvokeURLAction extends Action {
 	private void populateMethodBulkData(EntityEnclosingMethod method)
 			throws UnsupportedEncodingException {
 		String bulkData = viewData.getBulkPostData();
+		String contentType = viewData.getContentType();
 		if (bulkData != null && bulkData.length() > 0) {
 			method.setRequestEntity(new StringRequestEntity(bulkData,
-					"text/plain", FORM_ENCODING));
+					contentType, FORM_ENCODING));
 		}
 	}
 
