@@ -9,11 +9,12 @@ public interface HTTPViewData {
 	Map<String,String> getRequestPostDataFields();
 	String getBulkPostData();
 	String getContentType();
+	String getFileUploadPath();
 	
 	void setStatus(String status);
 	void setResponseHttpHeaders(Map<String, String> headers);
 	void setResponseData(String data);
 	void showErrorMessage(String errorMessage);
 	
-	void validateInputs();
+	boolean validInputs();
 }

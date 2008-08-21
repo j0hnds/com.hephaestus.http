@@ -1,6 +1,8 @@
 package com.hephaestus.http.actions;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -18,6 +20,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.util.EncodingUtil;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.action.Action;
@@ -57,6 +62,11 @@ public class InvokeURLAction extends Action {
 
 	@Override
 	public void run() {
+		if (! viewData.validInputs()) {
+			// Inputs not valid; don't execute.
+			return;
+		}
+		
 		String verb = viewData.getVerb();
 
 		if ("GET".equals(verb)) {
@@ -137,8 +147,9 @@ public class InvokeURLAction extends Action {
 		try {
 			populateMethodPostData(method);
 			populateMethodBulkData(method);
+			populateMethodFileUploadData(method);
 		}
-		catch (UnsupportedEncodingException e1) {
+		catch (Exception e1) {
 			viewData.showErrorMessage(e1.getLocalizedMessage());
 		}
 
@@ -187,8 +198,9 @@ public class InvokeURLAction extends Action {
 		try {
 			populateMethodPostData(method);
 			populateMethodBulkData(method);
+			populateMethodFileUploadData(method);
 		}
-		catch (UnsupportedEncodingException e1) {
+		catch (Exception e1) {
 			viewData.showErrorMessage(e1.getLocalizedMessage());
 		}
 
@@ -199,6 +211,15 @@ public class InvokeURLAction extends Action {
 		}
 		catch (Exception e) {
 			viewData.showErrorMessage(e.getLocalizedMessage());
+		}
+	}
+
+	private void populateMethodFileUploadData(EntityEnclosingMethod method) throws FileNotFoundException {
+		String fileUploadPath = viewData.getFileUploadPath();
+		if (fileUploadPath != null && fileUploadPath.length() > 0) {
+			File path = new File(fileUploadPath);
+			Part[] parts = { new FilePart(path.getName(), path) };
+			method.setRequestEntity(new MultipartRequestEntity(parts, method.getParams()));
 		}
 	}
 

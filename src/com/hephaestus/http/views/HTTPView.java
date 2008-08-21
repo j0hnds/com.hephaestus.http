@@ -676,8 +676,63 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		return tfContentType.getText();
 	}
 
-	public void validateInputs() {
-		// TODO: Complete the validation.
+	public boolean validInputs() {
+		boolean valid = true;
+		
+		// Make sure there is a protocol selected
+		String protocol = cbProtocol.getText();
+		if (protocol == null || protocol.length() == 0) {
+			showErrorMessage("Must select a protocol");
+			valid = false;
+		}
+		
+		// Make sure there is a host:port selected
+		String hostPort = cbHostPort.getText();
+		if (hostPort == null || hostPort.length() == 0) {
+			showErrorMessage("Must select a host:port");
+			valid = false;
+		}
+		
+		// Make sure there is a verb provided
+		String verb = cbVerbs.getText();
+		if (verb == null || verb.length() == 0) {
+			showErrorMessage("Must select a verb");
+			valid = false;
+		}
+		
+		String fileUploadPath = getFileUploadPath();
+		// If bulk postdata is provided, there must also be a content type
+		// specified.
+		String bulkData = tfBulkPostData.getText();
+		if (bulkData != null && bulkData.length() > 0) {
+			String contentType = tfContentType.getText();
+			if (contentType == null || contentType.length() == 0) {
+				showErrorMessage("Must specify a content type if bulk post data is provided");
+				valid = false;
+			}
+		}
+		int numInputs = 0;
+		numInputs += ((bulkData != null && bulkData.length() > 0) ? 1 : 0);
+		numInputs += ((getRequestPostDataFields().size() > 0) ? 1 : 0);
+		numInputs += ((fileUploadPath != null && fileUploadPath.length() > 0) ? 1 : 0);
+		if (numInputs > 1) {
+			showErrorMessage("Must provide only one of bulk post data, post data fields, or file upload path");
+			valid = false;
+		}
+		
+		if ("POST".equals(verb) || "PUT".equals(verb)) {
+			if ((bulkData == null || bulkData.length() == 0) && (getRequestPostDataFields().size() == 0) && (fileUploadPath == null || fileUploadPath.length() == 0))
+			{
+				showErrorMessage("Using verb POST or PUT without data being posted");
+				valid = false;
+			}
+		}
+		
+		return valid;
+	}
+
+	public String getFileUploadPath() {
+		return tfFileUploadPath.getText();
 	}
 
 }
