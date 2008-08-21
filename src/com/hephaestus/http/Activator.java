@@ -3,6 +3,8 @@ package com.hephaestus.http;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -14,6 +16,8 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+	
+	private BeanFactory context;
 	
 	/**
 	 * The constructor
@@ -28,6 +32,14 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		// Load up the application context.
+		try {
+			this.context = new ClassPathXmlApplicationContext("/com.hephaestus/http/config/HttpContext.xml");
+		}
+		catch (Exception e) {
+			System.out.println("Oops");
+		}
 	}
 
 	/*
@@ -37,6 +49,10 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+	}
+	
+	public static Object getBean(String beanName) {
+		return getDefault().getBeanFactory().getBean(beanName);
 	}
 
 	/**
@@ -57,5 +73,14 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+	
+	/**
+	 * Returns the bean factory for this plugin.
+	 * 
+	 * @return reference to the bean factory.
+	 */
+	public BeanFactory getBeanFactory() {
+		return context;
 	}
 }
