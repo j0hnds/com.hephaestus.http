@@ -188,17 +188,6 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 		createURLFields(entry);
 
-		Label lblVerb = new Label(entry, SWT.NONE);
-		lblVerb.setText("Verb:");
-		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		lblVerb.setLayoutData(gd);
-
-		cbVerbs = new Combo(entry, SWT.BORDER | SWT.READ_ONLY);
-		cbVerbs.setItems(VERBS);
-		gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-		cbVerbs.setLayoutData(gd);
-		cbVerbs.select(0);
-
 		createInputDataFields(entry);
 	}
 
@@ -478,8 +467,13 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		layout.justify = false;
 		layout.pack = true;
 		layout.spacing = 5;
-		layout.wrap = false;
+		layout.wrap = true;
 		fields.setLayout(layout);
+
+		// Drop-down for verbs
+		cbVerbs = new Combo(fields, SWT.BORDER | SWT.READ_ONLY);
+		cbVerbs.setItems(VERBS);
+		cbVerbs.select(0);
 
 		// Drop-down for protocols
 		cbProtocol = new Combo(fields, SWT.BORDER | SWT.READ_ONLY);
@@ -499,8 +493,6 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		lblSecondDelimiter.setText("/");
 
 		cbURI = new Combo(fields, SWT.BORDER);
-		rd = new RowData();
-		rd.width = 200;
 		cbURI.setLayoutData(rd);
 	}
 
