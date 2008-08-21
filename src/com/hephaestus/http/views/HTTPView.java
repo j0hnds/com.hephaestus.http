@@ -333,7 +333,6 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	private void createTableEditor(final TableCursor cursor, final Table tbl) {
-		// final TableCursor cursor = new TableCursor(tbl, SWT.NONE);
 		// create an editor to edit the cell when the user hits "ENTER"
 		// while over a cell in the table
 		final ControlEditor editor = new ControlEditor(cursor);
@@ -355,6 +354,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 				TableItem row = cursor.getRow();
 				int column = cursor.getColumn();
 				text.setText(row.getText(column));
+				text.selectAll();
 				text.addKeyListener(new KeyAdapter() {
 					public void keyPressed(KeyEvent e) {
 						// close the text editor and copy the data over
@@ -404,6 +404,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 				TableItem row = cursor.getRow();
 				int column = cursor.getColumn();
 				text.setText(row.getText(column));
+				text.selectAll();
 				text.addKeyListener(new KeyAdapter() {
 					public void keyPressed(KeyEvent e) {
 						// close the text editor and copy the data over
