@@ -1,11 +1,8 @@
 package com.hephaestus.http.views;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -16,48 +13,21 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
 import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.core.runtime.Preferences.PropertyChangeEvent;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
 
 import com.hephaestus.http.Activator;
-import com.hephaestus.http.actions.DeleteAllTableRowsAction;
-import com.hephaestus.http.actions.DeleteTableRowAction;
-import com.hephaestus.http.actions.InsertTableRowAction;
 import com.hephaestus.http.actions.InvokeURLAction;
 import com.hephaestus.http.preferences.PreferenceConstants;
+import com.hephaestus.http.views.ui.RequestData;
 import com.hephaestus.http.views.ui.URLFields;
 
 public class HTTPView extends ViewPart implements HTTPViewData,
 		IPropertyChangeListener {
-
-	// The column properties
-	private static final String[] COLUMN_PROPERTIES = { "NAME", "VALUE" };
-
-	// Action to insert a new request header
-	private Action insertNewRequestHeaderAction;
-
-	// Action to insert new post data
-	private Action insertNewRequestPostDataAction;
-
-	// Action to delete selected request headers
-	private Action deleteRequestHeaderAction;
-
-	// Action to delete selected post data
-	private Action deleteRequestPostDataAction;
-	
-	// Action to delete all request headers
-	private Action deleteAllRequestHeadersAction;
-	
-	// Action to delete all request post data
-	private Action deleteAllRequestPostDataAction;
 
 	// Action to invoke the URL
 	private Action invokeURLAction;
@@ -65,41 +35,17 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	// The URL formulation control
 	private URLFields cmpURLFields;
 
-	// The table for request headers
-	private Table tblRequestHeaders;
-
-	// The table for post data
-	private Table tblRequestPostData;
-
-	// The text field for bulk post data
-	private Text tfBulkPostData;
-
-	// The text field for the file upload path
-	private Text tfFileUploadPath;
-
 	// The text field for the response status.
 	private Text tfStatus;
 
 	// The text field for the response data
 	private Text tfResultData;
 
-	// The text field for the content type of the bulk post data
-	private Text tfContentType;
-
 	// The table for the result headers
 	private Table tblResultHeaders;
 
-	// The table viewer for the request headers
-	private TableViewer tvRequestHeaders;
-
-	// The table viewer for the request post data
-	private TableViewer tvRequestPostData;
-
-	// The model data for the request post data
-	private NameValuePairs nvpRequestPostData;
-
-	// The model data for the request headers
-	private NameValuePairs nvpRequestHeaders;
+	// The request data control
+	private RequestData requestData;
 
 	/**
 	 * Constructs a new HTTPView object.
@@ -108,8 +54,6 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		Activator.getDefault().getPluginPreferences()
 				.addPropertyChangeListener(this);
 
-		nvpRequestPostData = new NameValuePairs();
-		nvpRequestHeaders = new NameValuePairs();
 	}
 
 	@Override
@@ -140,7 +84,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(cmpURLFields,
 				"com.hephaestus.http.viewer");
 		makeActions();
-		hookContextMenu();
+		requestData.hookContextMenu(getSite());
 		contributeToActionBars();
 	}
 
@@ -248,200 +192,11 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		cmpURLFields.setLayoutData(gd);
 
-		createInputDataFields(entry);
-	}
-
-	private void createInputDataFields(Composite entry) {
-		TabFolder tabs = new TabFolder(entry, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gd.horizontalSpan = 2;
-		gd.heightHint = 100;
-		tabs.setLayoutData(gd);
-
-		// Create a tab item for Http Headers
-		createRequestHttpHeaders(tabs);
-
-		// Create a tab item for normal POST Data (name/values)
-		createRequestPostData(tabs);
-
-		// Create a tab item for bulk POST data
-		createRequestBulkPostData(tabs);
-
-		// Create a tab item for File Upload
-		createRequestFileUpload(tabs);
-	}
-
-	private void createRequestFileUpload(TabFolder tabs) {
-		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("File Upload");
-
-		Composite fields = new Composite(tabs, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		fields.setLayout(layout);
-
-		tfFileUploadPath = new Text(fields, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		tfFileUploadPath.setLayoutData(gd);
-
-		Button btn = new Button(fields, SWT.PUSH);
-		btn.setText("...");
-		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		btn.setLayoutData(gd);
-		btn.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-
-			}
-
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(cmpURLFields.getShell(),
-						SWT.OPEN);
-				dialog.setFilterNames(new String[] { "All Files (*.*)" });
-				dialog.setFilterExtensions(new String[] { "*.*" });
-				dialog.setFilterPath("C:/");
-				String path = dialog.open();
-				if (path != null) {
-					tfFileUploadPath.setText(path);
-				}
-			}
-
-		});
-
-		item.setControl(fields);
-	}
-
-	private void createRequestBulkPostData(TabFolder tabs) {
-		Composite cmp = new Composite(tabs, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		cmp.setLayout(layout);
-
-		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("Bulk POST Data");
-
-		Label lblContentType = new Label(cmp, SWT.NONE);
-		lblContentType.setText("Content Type:");
-		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		lblContentType.setLayoutData(gd);
-
-		tfContentType = new Text(cmp, SWT.SINGLE | SWT.BORDER);
-		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		tfContentType.setLayoutData(gd);
-
-		tfBulkPostData = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+		requestData = new RequestData(entry, SWT.NONE);
 		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 2;
-		tfBulkPostData.setLayoutData(gd);
-
-		item.setControl(cmp);
-	}
-
-	private void createRequestPostData(TabFolder tabs) {
-		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("POST Data");
-
-		// Set up a table to enter the headers
-		tblRequestPostData = new Table(tabs, SWT.SINGLE | SWT.BORDER
-				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
-				| SWT.HIDE_SELECTION);
-		tblRequestPostData.setLinesVisible(true);
-		tblRequestPostData.setHeaderVisible(true);
-
-		// Set up the columns
-		TableColumn col = new TableColumn(tblRequestPostData, SWT.NONE);
-		col.setText("Field");
-		col.setWidth(100);
-
-		col = new TableColumn(tblRequestPostData, SWT.NONE);
-		col.setText("Value");
-		col.setWidth(100);
-
-		item.setControl(tblRequestPostData);
-
-		tvRequestPostData = new TableViewer(tblRequestPostData);
-		tvRequestPostData.setColumnProperties(COLUMN_PROPERTIES);
-		// Create the Cell Editors
-		CellEditor[] editors = new CellEditor[2];
-
-		TextCellEditor fieldEditor = new TextCellEditor(tblRequestPostData);
-		editors[0] = fieldEditor;
-
-		TextCellEditor valueEditor = new TextCellEditor(tblRequestPostData);
-		editors[1] = valueEditor;
-
-		tvRequestPostData.setCellEditors(editors);
-
-		tvRequestPostData.setCellModifier(new NameValuePairCellModifier(
-				tvRequestPostData, nvpRequestPostData));
-		tvRequestPostData.setLabelProvider(new NameValuePairLabelProvider());
-		tvRequestPostData.setContentProvider(new NameValuePairContentProvider(
-				nvpRequestPostData, tvRequestPostData));
-		tvRequestPostData.setInput(nvpRequestPostData);
-	}
-
-	private void createRequestHttpHeaders(TabFolder tabs) {
-		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("HTTP Headers");
-
-		// Set up a table to enter the headers
-		tblRequestHeaders = new Table(tabs, SWT.SINGLE | SWT.BORDER
-				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
-				| SWT.HIDE_SELECTION);
-		tblRequestHeaders.setLinesVisible(true);
-		tblRequestHeaders.setHeaderVisible(true);
-
-		// Set up the columns
-		TableColumn col = new TableColumn(tblRequestHeaders, SWT.NONE);
-		col.setText("Header");
-		col.setWidth(100);
-
-		col = new TableColumn(tblRequestHeaders, SWT.NONE);
-		col.setText("Value");
-		col.setWidth(100);
-		item.setControl(tblRequestHeaders);
-
-		tvRequestHeaders = new TableViewer(tblRequestHeaders);
-		tvRequestHeaders.setLabelProvider(new NameValuePairLabelProvider());
-		tvRequestHeaders.setColumnProperties(COLUMN_PROPERTIES);
-
-		// Create the Cell Editors
-		CellEditor[] editors = new CellEditor[2];
-
-		TextCellEditor fieldEditor = new TextCellEditor(tblRequestHeaders);
-		editors[0] = fieldEditor;
-
-		TextCellEditor valueEditor = new TextCellEditor(tblRequestHeaders);
-		editors[1] = valueEditor;
-
-		tvRequestHeaders.setCellEditors(editors);
-		tvRequestHeaders.setCellModifier(new NameValuePairCellModifier(
-				tvRequestHeaders, nvpRequestHeaders));
-		tvRequestHeaders.setContentProvider(new NameValuePairContentProvider(
-				nvpRequestHeaders, tvRequestHeaders));
-		tvRequestHeaders.setInput(nvpRequestHeaders);
-	}
-
-	/**
-	 * Hooks up a context menu to the two editable tables.
-	 */
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				HTTPView.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(tblRequestHeaders);
-		tblRequestHeaders.setMenu(menu);
-		getSite().registerContextMenu(menuMgr, tvRequestHeaders);
-
-		menu = menuMgr.createContextMenu(tblRequestPostData);
-		tblRequestPostData.setMenu(menu);
-		getSite().registerContextMenu(menuMgr, tvRequestPostData);
+		gd.heightHint = 100;
+		requestData.setLayoutData(gd);
 	}
 
 	private void contributeToActionBars() {
@@ -455,48 +210,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		manager.add(new Separator());
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
-		if (tblRequestHeaders.isFocusControl()) {
-			manager.add(insertNewRequestHeaderAction);
-			manager.add(deleteRequestHeaderAction);
-			manager.add(deleteAllRequestHeadersAction);
-		}
-		else if (tblRequestPostData.isFocusControl()) {
-			manager.add(insertNewRequestPostDataAction);
-			manager.add(deleteRequestPostDataAction);
-			manager.add(deleteAllRequestPostDataAction);
-		}
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
-
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(invokeURLAction);
 	}
 
 	private void makeActions() {
-		insertNewRequestHeaderAction = new InsertTableRowAction(
-				nvpRequestHeaders);
-		insertNewRequestPostDataAction = new InsertTableRowAction(
-				nvpRequestPostData);
-		deleteRequestHeaderAction = new DeleteTableRowAction(tvRequestHeaders);
-		deleteRequestPostDataAction = new DeleteTableRowAction(
-				tvRequestPostData);
-		deleteAllRequestHeadersAction = new DeleteAllTableRowsAction(tvRequestHeaders);
-		deleteAllRequestPostDataAction = new DeleteAllTableRowsAction(tvRequestPostData);
 		invokeURLAction = new InvokeURLAction(this);
-	}
-
-	protected void insertNewHeaderAction() {
-		TableItem ti = new TableItem(tblRequestHeaders, SWT.NONE);
-		ti.setText(0, "HEADER");
-		ti.setText(1, "VALUE");
-	}
-
-	protected void insertNewPostDataAction() {
-		TableItem ti = new TableItem(tblRequestPostData, SWT.NONE);
-		ti.setText(0, "FIELD");
-		ti.setText(1, "VALUE");
 	}
 
 	public void showErrorMessage(String message) {
@@ -512,27 +231,15 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	// Implementation of HTTPViewData
 	public String getBulkPostData() {
-		return tfBulkPostData.getText();
+		return requestData.getBulkPostData();
 	}
 
 	public Map<String, String> getRequestHttpHeaders() {
-		Map<String, String> headers = new HashMap<String, String>();
-
-		for (NameValuePair nvp : nvpRequestHeaders.getNameValuePairs()) {
-			headers.put(nvp.getName(), nvp.getValue());
-		}
-
-		return headers;
+		return requestData.getRequestHttpHeaders();
 	}
 
 	public Map<String, String> getRequestPostDataFields() {
-		Map<String, String> headers = new HashMap<String, String>();
-
-		for (NameValuePair nvp : nvpRequestPostData.getNameValuePairs()) {
-			headers.put(nvp.getName(), nvp.getValue());
-		}
-
-		return headers;
+		return requestData.getRequestPostDataFields();
 	}
 
 	public String getURL() {
@@ -575,7 +282,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public String getContentType() {
-		return tfContentType.getText();
+		return requestData.getContentType();
 	}
 
 	public boolean validInputs() {
@@ -605,9 +312,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		String fileUploadPath = getFileUploadPath();
 		// If bulk postdata is provided, there must also be a content type
 		// specified.
-		String bulkData = tfBulkPostData.getText();
+		String bulkData = requestData.getBulkPostData();
 		if (bulkData != null && bulkData.length() > 0) {
-			String contentType = tfContentType.getText();
+			String contentType = requestData.getContentType();
 			if (contentType == null || contentType.length() == 0) {
 				showErrorMessage("Must specify a content type if bulk post data is provided");
 				valid = false;
@@ -636,7 +343,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public String getFileUploadPath() {
-		return tfFileUploadPath.getText();
+		return requestData.getFileUploadPath();
 	}
 
 }
