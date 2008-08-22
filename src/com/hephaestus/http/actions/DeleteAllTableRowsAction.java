@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.hephaestus.http.views.NameValuePairs;
+import com.hephaestus.http.model.NameValuePairs;
 
 /**
  * Removes all the rows of the associated table.

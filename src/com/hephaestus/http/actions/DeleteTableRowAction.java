@@ -6,8 +6,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.hephaestus.http.views.NameValuePair;
-import com.hephaestus.http.views.NameValuePairs;
+import com.hephaestus.http.model.NameValuePair;
+import com.hephaestus.http.model.NameValuePairs;
 
 /**
  * This action is responsible for the deletion of a row of data in a

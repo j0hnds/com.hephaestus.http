@@ -65,7 +65,7 @@ public class URLFields extends Composite {
 	 * 
 	 * @return the URL
 	 */
-	public String getURL() {
+	public final String getURL() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(cbProtocol.getText());
 		sb.append("://");
@@ -81,7 +81,7 @@ public class URLFields extends Composite {
 	 * combo box. This allows the URI to subsequently selected from the
 	 * list if necessary.
 	 */
-	public void saveCurrentURI() {
+	public final void saveCurrentURI() {
 		String uri = cbURI.getText();
 		if (cbURI.indexOf(uri) < 0) {
 			cbURI.add(uri);
@@ -94,7 +94,7 @@ public class URLFields extends Composite {
 	 * 
 	 * @return the verb.
 	 */
-	public String getVerb() {
+	public final String getVerb() {
 		return cbVerbs.getText();
 	}
 	
@@ -155,7 +155,7 @@ public class URLFields extends Composite {
 	/**
 	 * Resets the host:ports combo box back to the preferences.
 	 */
-	public void resetHostPorts() {
+	public final void resetHostPorts() {
 		cbHostPort.removeAll();
 		loadHostPortComboBox();
 	}
@@ -165,7 +165,7 @@ public class URLFields extends Composite {
 	 * 
 	 * @return the protocol.
 	 */
-	public String getProtocol() {
+	public final String getProtocol() {
 		return cbProtocol.getText();
 	}
 	
@@ -174,7 +174,7 @@ public class URLFields extends Composite {
 	 * 
 	 * @return the host:port.
 	 */
-	public String getHostPort() {
+	public final String getHostPort() {
 		return cbHostPort.getText();
 	}
 }

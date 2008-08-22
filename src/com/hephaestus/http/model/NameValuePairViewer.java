@@ -1,4 +1,5 @@
-package com.hephaestus.http.views;
+package com.hephaestus.http.model;
+
 
 /**
  * Defines an interface for modifications to NameValuePairs. Implementers will

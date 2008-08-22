@@ -1,9 +1,10 @@
-package com.hephaestus.http.views;
+package com.hephaestus.http.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 /**
  * The domain model for name-value pairs

@@ -41,11 +41,11 @@ public class ResponseData extends Composite {
 		createControls();
 	}
 
-	public void setResponseData(String data) {
+	public final void setResponseData(String data) {
 		tfResultData.setText(data);
 	}
 
-	public void setResponseHttpHeaders(Map<String, String> headers) {
+	public final void setResponseHttpHeaders(Map<String, String> headers) {
 		tblResultHeaders.removeAll();
 
 		for (String header : headers.keySet()) {

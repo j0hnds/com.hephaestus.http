@@ -4,13 +4,17 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.hephaestus.http.model.NameValuePair;
+import com.hephaestus.http.model.NameValuePairViewer;
+import com.hephaestus.http.model.NameValuePairs;
+
 /**
  * A Structured Content Provider for NameValuePairs.
  * 
  * @author Dave Sieh
  * 
  */
-public class NameValuePairContentProvider implements
+public final class NameValuePairContentProvider implements
 		IStructuredContentProvider, NameValuePairViewer {
 
 	// The name value pairs

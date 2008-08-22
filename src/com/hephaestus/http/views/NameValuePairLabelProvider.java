@@ -4,12 +4,14 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.hephaestus.http.model.NameValuePair;
+
 /**
  * A TableLabelProvider for NameValuePair data.
  * 
  * @author Dave Sieh
  */
-public class NameValuePairLabelProvider extends LabelProvider implements
+public final class NameValuePairLabelProvider extends LabelProvider implements
 		ITableLabelProvider {
 
 	public Image getColumnImage(Object element, int columnIndex) {

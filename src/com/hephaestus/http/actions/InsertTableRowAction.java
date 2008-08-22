@@ -4,8 +4,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.hephaestus.http.views.NameValuePair;
-import com.hephaestus.http.views.NameValuePairs;
+import com.hephaestus.http.model.NameValuePair;
+import com.hephaestus.http.model.NameValuePairs;
 
 /**
  * This action is responsible for adding new NameValuePair's to the

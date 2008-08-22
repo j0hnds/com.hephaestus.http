@@ -1,4 +1,4 @@
-package com.hephaestus.http.views;
+package com.hephaestus.http.model;
 
 /**
  * A POJO for hanging onto name/value pairs.

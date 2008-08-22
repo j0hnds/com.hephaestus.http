@@ -4,12 +4,15 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.hephaestus.http.model.NameValuePair;
+import com.hephaestus.http.model.NameValuePairs;
+
 /**
  * A Cell Modifier for Name Value Pair objects.
  * 
  * @author Dave Sieh
  */
-public class NameValuePairCellModifier implements ICellModifier {
+public final class NameValuePairCellModifier implements ICellModifier {
 
 	// The table viewer
 	private TableViewer tableViewer;

@@ -32,11 +32,11 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import com.hephaestus.http.actions.DeleteAllTableRowsAction;
 import com.hephaestus.http.actions.DeleteTableRowAction;
 import com.hephaestus.http.actions.InsertTableRowAction;
-import com.hephaestus.http.views.NameValuePair;
+import com.hephaestus.http.model.NameValuePair;
+import com.hephaestus.http.model.NameValuePairs;
 import com.hephaestus.http.views.NameValuePairCellModifier;
 import com.hephaestus.http.views.NameValuePairContentProvider;
 import com.hephaestus.http.views.NameValuePairLabelProvider;
-import com.hephaestus.http.views.NameValuePairs;
 
 /**
  * This class encapsulates the construction and management of the controls
@@ -288,10 +288,11 @@ public class RequestData extends Composite {
 				nvpRequestHeaders, tvRequestHeaders));
 		tvRequestHeaders.setInput(nvpRequestHeaders);
 	}
+	
 	/**
 	 * Hooks up a context menu to the two editable tables.
 	 */
-	public void hookContextMenu(IWorkbenchPartSite site) {
+	public final void hookContextMenu(IWorkbenchPartSite site) {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
@@ -335,11 +336,11 @@ public class RequestData extends Composite {
 		deleteAllRequestPostDataAction = new DeleteAllTableRowsAction(tvRequestPostData);
 	}
 	
-	public String getBulkPostData() {
+	public final String getBulkPostData() {
 		return tfBulkPostData.getText();
 	}
 
-	public Map<String, String> getRequestHttpHeaders() {
+	public final Map<String, String> getRequestHttpHeaders() {
 		Map<String, String> headers = new HashMap<String, String>();
 
 		for (NameValuePair nvp : nvpRequestHeaders.getNameValuePairs()) {
@@ -349,7 +350,7 @@ public class RequestData extends Composite {
 		return headers;
 	}
 	
-	public Map<String, String> getRequestPostDataFields() {
+	public final Map<String, String> getRequestPostDataFields() {
 		Map<String, String> headers = new HashMap<String, String>();
 
 		for (NameValuePair nvp : nvpRequestPostData.getNameValuePairs()) {
@@ -359,11 +360,11 @@ public class RequestData extends Composite {
 		return headers;
 	}
 	
-	public String getContentType() {
+	public final String getContentType() {
 		return tfContentType.getText();
 	}
 	
-	public String getFileUploadPath() {
+	public final String getFileUploadPath() {
 		return tfFileUploadPath.getText();
 	}
 }
