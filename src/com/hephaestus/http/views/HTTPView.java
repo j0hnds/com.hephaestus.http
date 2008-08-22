@@ -69,8 +69,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	private Table tblResultHeaders;
 	private TableViewer tvRequestHeaders;
 	private TableViewer tvRequestPostData;
-	private TableCursor tcRequestHeaders;
-	private TableCursor tcRequestPostData;
+	private NameValuePairs nvpRequestPostData;
+	private NameValuePairs nvpRequestHeaders;
 
 	/**
 	 * The constructor.
@@ -78,6 +78,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	public HTTPView() {
 		Activator.getDefault().getPluginPreferences()
 				.addPropertyChangeListener(this);
+		
+		nvpRequestPostData = new NameValuePairs();
+		nvpRequestHeaders = new NameValuePairs();
 	}
 
 	@Override
@@ -300,9 +303,23 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		item.setControl(tblRequestPostData);
 
 		tvRequestPostData = new TableViewer(tblRequestPostData);
+		// Create the Cell Editors
+		CellEditor[] editors = new CellEditor[2];
+		
+		TextCellEditor fieldEditor = new TextCellEditor(tblRequestPostData);
+		editors[0] = fieldEditor;
+		
+		TextCellEditor valueEditor = new TextCellEditor(tblRequestPostData);
+		editors[1] = valueEditor;
+		
+		tvRequestPostData.setCellEditors(editors);
 
-		tcRequestPostData = new TableCursor(tblRequestPostData, SWT.NONE);
-		createTableEditor(tcRequestPostData, tblRequestPostData);
+		tvRequestPostData.setCellModifier(new NameValuePairCellModifier(tvRequestPostData, nvpRequestPostData));
+		tvRequestPostData.setContentProvider(new NameValuePairContentProvider(nvpRequestPostData, tvRequestPostData));
+		tvRequestPostData.setInput(nvpRequestPostData);
+
+//		tcRequestPostData = new TableCursor(tblRequestPostData, SWT.NONE);
+//		createTableEditor(tcRequestPostData, tblRequestPostData);
 	}
 
 	private void createRequestHttpHeaders(TabFolder tabs) {
@@ -326,10 +343,23 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		item.setControl(tblRequestHeaders);
 
 		tvRequestHeaders = new TableViewer(tblRequestHeaders);
-
+		
+		// Create the Cell Editors
+		CellEditor[] editors = new CellEditor[2];
+		
+		TextCellEditor fieldEditor = new TextCellEditor(tblRequestHeaders);
+		editors[0] = fieldEditor;
+		
+		TextCellEditor valueEditor = new TextCellEditor(tblRequestHeaders);
+		editors[1] = valueEditor;
+		
+		tvRequestHeaders.setCellEditors(editors);
+		tvRequestHeaders.setCellModifier(new NameValuePairCellModifier(tvRequestHeaders, nvpRequestHeaders));
+		tvRequestHeaders.setContentProvider(new NameValuePairContentProvider(nvpRequestHeaders, tvRequestHeaders));
+		tvRequestHeaders.setInput(nvpRequestHeaders);
 		// Create a cell cursor to navigate/edit the table
-		tcRequestHeaders = new TableCursor(tblRequestHeaders, SWT.NONE);
-		createTableEditor(tcRequestHeaders, tblRequestHeaders);
+//		tcRequestHeaders = new TableCursor(tblRequestHeaders, SWT.NONE);
+//		createTableEditor(tcRequestHeaders, tblRequestHeaders);
 	}
 
 	private void createTableEditor(final TableCursor cursor, final Table tbl) {
@@ -527,13 +557,11 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		if (tblRequestHeaders.isFocusControl()
-				|| tcRequestHeaders.isFocusControl()) {
+		if (tblRequestHeaders.isFocusControl()) {
 			manager.add(insertNewRequestHeaderAction);
 			manager.add(deleteRequestHeaderAction);
 		}
-		else if (tblRequestPostData.isFocusControl()
-				|| tcRequestPostData.isFocusControl()) {
+		else if (tblRequestPostData.isFocusControl()) {
 			manager.add(insertNewRequestPostDataAction);
 			manager.add(deleteRequestPostDataAction);
 		}
@@ -548,12 +576,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	private void makeActions() {
 		insertNewRequestHeaderAction = new InsertTableRowAction(
-				tblRequestHeaders);
+				nvpRequestHeaders);
 		insertNewRequestPostDataAction = new InsertTableRowAction(
-				tblRequestPostData);
-		deleteRequestHeaderAction = new DeleteTableRowAction(tblRequestHeaders);
+				nvpRequestPostData);
+		deleteRequestHeaderAction = new DeleteTableRowAction(nvpRequestHeaders);
 		deleteRequestPostDataAction = new DeleteTableRowAction(
-				tblRequestPostData);
+				nvpRequestPostData);
 		invokeURLAction = new InvokeURLAction(this);
 	}
 

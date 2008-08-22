@@ -1,18 +1,18 @@
 package com.hephaestus.http.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.hephaestus.http.views.NameValuePair;
+import com.hephaestus.http.views.NameValuePairs;
+
 public class InsertTableRowAction extends Action {
 
-	private Table tbl;
+	private NameValuePairs pairs;
 
-	public InsertTableRowAction(Table tbl) {
-		this.tbl = tbl;
+	public InsertTableRowAction(NameValuePairs pairs) {
+		this.pairs = pairs;
 		setText("Insert");
 		setToolTipText("Insert New Header");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
@@ -21,8 +21,6 @@ public class InsertTableRowAction extends Action {
 
 	@Override
 	public void run() {
-		TableItem ti = new TableItem(tbl, SWT.NONE);
-		ti.setText(0, "FIELD");
-		ti.setText(1, "VALUE");
+		pairs.addNameValuePair(new NameValuePair());
 	}
 }

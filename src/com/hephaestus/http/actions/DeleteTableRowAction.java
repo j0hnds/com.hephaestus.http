@@ -5,12 +5,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.hephaestus.http.views.NameValuePairs;
+
 public class DeleteTableRowAction extends Action {
 
-	private Table tbl;
+	private NameValuePairs pairs;
 
-	public DeleteTableRowAction(Table tbl) {
-		this.tbl = tbl;
+	public DeleteTableRowAction(NameValuePairs pairs) {
+		this.pairs = pairs;
 		setText("Delete");
 		setToolTipText("Delete Row(s)");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
@@ -19,7 +21,7 @@ public class DeleteTableRowAction extends Action {
 
 	@Override
 	public void run() {
-		int[] selectedItems = tbl.getSelectionIndices();
-		tbl.remove(selectedItems);
+//		int[] selectedItems = tbl.getSelectionIndices();
+//		tbl.remove(selectedItems);
 	}
 }
