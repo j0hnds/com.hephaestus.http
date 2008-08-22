@@ -37,6 +37,13 @@ public class NameValuePairs {
 		notifyChange(nvp);
 	}
 	
+	public void removeAll() {
+		for (NameValuePair nvp : pairs) {
+			notifyRemove(nvp);
+		}
+		pairs.clear();
+	}
+	
 	public void addChangeListener(NameValuePairViewer listener) {
 		changeListeners.add(listener);
 	}

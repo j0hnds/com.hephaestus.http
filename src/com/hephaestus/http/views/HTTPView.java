@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.actions.DeleteAllTableRowsAction;
 import com.hephaestus.http.actions.DeleteTableRowAction;
 import com.hephaestus.http.actions.InsertTableRowAction;
 import com.hephaestus.http.actions.InvokeURLAction;
@@ -60,6 +61,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	// Action to delete selected post data
 	private Action deleteRequestPostDataAction;
+	
+	// Action to delete all request headers
+	private Action deleteAllRequestHeadersAction;
+	
+	// Action to delete all request post data
+	private Action deleteAllRequestPostDataAction;
 
 	// Action to invoke the URL
 	private Action invokeURLAction;
@@ -507,10 +514,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		if (tblRequestHeaders.isFocusControl()) {
 			manager.add(insertNewRequestHeaderAction);
 			manager.add(deleteRequestHeaderAction);
+			manager.add(deleteAllRequestHeadersAction);
 		}
 		else if (tblRequestPostData.isFocusControl()) {
 			manager.add(insertNewRequestPostDataAction);
 			manager.add(deleteRequestPostDataAction);
+			manager.add(deleteAllRequestPostDataAction);
 		}
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -528,6 +537,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		deleteRequestHeaderAction = new DeleteTableRowAction(tvRequestHeaders);
 		deleteRequestPostDataAction = new DeleteTableRowAction(
 				tvRequestPostData);
+		deleteAllRequestHeadersAction = new DeleteAllTableRowsAction(tvRequestHeaders);
+		deleteAllRequestPostDataAction = new DeleteAllTableRowsAction(tvRequestPostData);
 		invokeURLAction = new InvokeURLAction(this);
 	}
 
