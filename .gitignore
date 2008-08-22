@@ -1,2 +1,4 @@
 bin/*
+tmp/*
 .settings/*
+lib/HttpRequestData.jar

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://hephaestus.com/HttpRequestData" xmlns:tns="http://hephaestus.com/HttpRequestData" elementFormDefault="qualified">
+	<element name="HttpRequestData" type="tns:HttpRequestDataType" />
+	<complexType name="HttpRequestDataType">
+		<sequence>
+			<element name="Headers" type="tns:PostDataType" />
+			<choice>
+				<element name="FileUpload" type="tns:FileUploadType" />
+				<element name="BulkPostData" type="string" />
+				<element name="PostData" type="tns:PostDataType" />
+			</choice>
+		</sequence>
+		<attribute name="verb" type="string" />
+		<attribute name="protocol" type="string" />
+		<attribute name="hostport" type="string" />
+		<attribute name="uri" type="string" />
+	</complexType>
+	<complexType name="FileUploadType">
+		<attribute name="path" type="string"/>
+	</complexType>
+	<complexType name="PostDataType">
+		<sequence>
+			<element name="NameValuePair" type="tns:NameValuePairType" minOccurs="1" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="NameValuePairType">
+		<sequence>
+			<element name="Name" type="string" />
+			<element name="Value" type="string" />
+		</sequence>
+	</complexType>
+</schema>
