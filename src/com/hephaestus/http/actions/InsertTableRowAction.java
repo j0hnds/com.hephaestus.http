@@ -21,6 +21,6 @@ public class InsertTableRowAction extends Action {
 
 	@Override
 	public void run() {
-		pairs.addNameValuePair(new NameValuePair());
+		pairs.addNameValuePair(new NameValuePair("Name", "Value"));
 	}
 }

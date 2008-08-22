@@ -62,6 +62,7 @@ public class NameValuePairCellModifier implements ICellModifier {
 			if (property.equals(columnName)) {
 				break;
 			}
+			index++;
 		}
 		return index;
 	}

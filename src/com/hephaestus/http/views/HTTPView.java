@@ -19,15 +19,6 @@ import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.core.runtime.Preferences.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.custom.ControlEditor;
-import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -50,6 +41,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		IPropertyChangeListener {
 	private static final String[] PROTOCOLS = { "http", "https" };
 	private static final String[] VERBS = { "GET", "PUT", "POST", "DELETE" };
+	private static final String[] COLUMN_NAMES = { "NAME", "VALUE" };
 	private Action insertNewRequestHeaderAction;
 	private Action insertNewRequestPostDataAction;
 	private Action deleteRequestHeaderAction;
@@ -286,8 +278,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		item.setText("POST Data");
 
 		// Set up a table to enter the headers
-		tblRequestPostData = new Table(tabs, SWT.MULTI | SWT.BORDER
-				| SWT.FULL_SELECTION);
+		tblRequestPostData = new Table(tabs, SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
+				SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 		tblRequestPostData.setLinesVisible(true);
 		tblRequestPostData.setHeaderVisible(true);
 
@@ -303,6 +295,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		item.setControl(tblRequestPostData);
 
 		tvRequestPostData = new TableViewer(tblRequestPostData);
+		tvRequestPostData.setColumnProperties(COLUMN_NAMES);
 		// Create the Cell Editors
 		CellEditor[] editors = new CellEditor[2];
 		
@@ -315,11 +308,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		tvRequestPostData.setCellEditors(editors);
 
 		tvRequestPostData.setCellModifier(new NameValuePairCellModifier(tvRequestPostData, nvpRequestPostData));
+		tvRequestPostData.setLabelProvider(new NameValuePairLabelProvider());
 		tvRequestPostData.setContentProvider(new NameValuePairContentProvider(nvpRequestPostData, tvRequestPostData));
 		tvRequestPostData.setInput(nvpRequestPostData);
-
-//		tcRequestPostData = new TableCursor(tblRequestPostData, SWT.NONE);
-//		createTableEditor(tcRequestPostData, tblRequestPostData);
 	}
 
 	private void createRequestHttpHeaders(TabFolder tabs) {
@@ -327,8 +318,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		item.setText("HTTP Headers");
 
 		// Set up a table to enter the headers
-		tblRequestHeaders = new Table(tabs, SWT.MULTI | SWT.BORDER
-				| SWT.FULL_SELECTION);
+		tblRequestHeaders = new Table(tabs, SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
+				SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 		tblRequestHeaders.setLinesVisible(true);
 		tblRequestHeaders.setHeaderVisible(true);
 
@@ -343,6 +334,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		item.setControl(tblRequestHeaders);
 
 		tvRequestHeaders = new TableViewer(tblRequestHeaders);
+		tvRequestHeaders.setLabelProvider(new NameValuePairLabelProvider());
+		tvRequestHeaders.setColumnProperties(COLUMN_NAMES);
 		
 		// Create the Cell Editors
 		CellEditor[] editors = new CellEditor[2];
@@ -357,135 +350,6 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		tvRequestHeaders.setCellModifier(new NameValuePairCellModifier(tvRequestHeaders, nvpRequestHeaders));
 		tvRequestHeaders.setContentProvider(new NameValuePairContentProvider(nvpRequestHeaders, tvRequestHeaders));
 		tvRequestHeaders.setInput(nvpRequestHeaders);
-		// Create a cell cursor to navigate/edit the table
-//		tcRequestHeaders = new TableCursor(tblRequestHeaders, SWT.NONE);
-//		createTableEditor(tcRequestHeaders, tblRequestHeaders);
-	}
-
-	private void createTableEditor(final TableCursor cursor, final Table tbl) {
-		// create an editor to edit the cell when the user hits "ENTER"
-		// while over a cell in the table
-		final ControlEditor editor = new ControlEditor(cursor);
-		editor.grabHorizontal = true;
-		editor.grabVertical = true;
-		cursor.addSelectionListener(new SelectionAdapter() {
-			// when the TableEditor is over a cell, select the corresponding row
-			// in
-			// the table
-			public void widgetSelected(SelectionEvent e) {
-				tbl.setSelection(new TableItem[] { cursor.getRow() });
-			}
-
-			// when the user hits "ENTER" in the TableCursor, pop up a text
-			// editor so that
-			// they can change the text of the cell
-			public void widgetDefaultSelected(SelectionEvent e) {
-				final Text text = new Text(cursor, SWT.NONE);
-				TableItem row = cursor.getRow();
-				int column = cursor.getColumn();
-				text.setText(row.getText(column));
-				text.selectAll();
-				text.addKeyListener(new KeyAdapter() {
-					public void keyPressed(KeyEvent e) {
-						// close the text editor and copy the data over
-						// when the user hits "ENTER"
-						if (e.character == SWT.CR) {
-							TableItem row = cursor.getRow();
-							int column = cursor.getColumn();
-							row.setText(column, text.getText());
-							text.dispose();
-						}
-						// close the text editor when the user hits "ESC"
-						if (e.character == SWT.ESC) {
-							text.dispose();
-						}
-					}
-				});
-				// close the text editor when the user tabs away
-				text.addFocusListener(new FocusAdapter() {
-					public void focusLost(FocusEvent e) {
-						text.dispose();
-					}
-				});
-				editor.setEditor(text);
-				text.setFocus();
-			}
-		});
-		// Hide the TableCursor when the user hits the "CTRL" or "SHIFT" key.
-		// This alows the user to select multiple items in the table.
-		cursor.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.CTRL || e.keyCode == SWT.SHIFT
-						|| (e.stateMask & SWT.CONTROL) != 0
-						|| (e.stateMask & SWT.SHIFT) != 0) {
-					cursor.setVisible(false);
-				}
-			}
-		});
-		// When the user double clicks in the TableCursor, pop up a text editor
-		// so that
-		// they can change the text of the cell
-		cursor.addMouseListener(new MouseAdapter() {
-			public void mouseDown(MouseEvent e) {
-				if (e.button > 1) {
-					return;
-				}
-				final Text text = new Text(cursor, SWT.NONE);
-				TableItem row = cursor.getRow();
-				int column = cursor.getColumn();
-				text.setText(row.getText(column));
-				text.selectAll();
-				text.addKeyListener(new KeyAdapter() {
-					public void keyPressed(KeyEvent e) {
-						// close the text editor and copy the data over
-						// when the user hits "ENTER"
-						if (e.character == SWT.CR) {
-							TableItem row = cursor.getRow();
-							int column = cursor.getColumn();
-							row.setText(column, text.getText());
-							text.dispose();
-						}
-						// close the text editor when the user hits "ESC"
-						if (e.character == SWT.ESC) {
-							text.dispose();
-						}
-					}
-				});
-				// close the text editor when the user clicks away
-				text.addFocusListener(new FocusAdapter() {
-					public void focusLost(FocusEvent e) {
-						text.dispose();
-					}
-				});
-				editor.setEditor(text);
-				text.setFocus();
-			}
-		});
-
-		// Show the TableCursor when the user releases the "SHIFT" or "CTRL"
-		// key.
-		// This signals the end of the multiple selection task.
-		tbl.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.CONTROL && (e.stateMask & SWT.SHIFT) != 0)
-					return;
-				if (e.keyCode == SWT.SHIFT && (e.stateMask & SWT.CONTROL) != 0)
-					return;
-				if (e.keyCode != SWT.CONTROL
-						&& (e.stateMask & SWT.CONTROL) != 0)
-					return;
-				if (e.keyCode != SWT.SHIFT && (e.stateMask & SWT.SHIFT) != 0)
-					return;
-
-				TableItem[] selection = tbl.getSelection();
-				TableItem row = (selection.length == 0) ? tbl.getItem(tbl
-						.getTopIndex()) : selection[0];
-				tbl.showItem(row);
-				cursor.setSelection(row, 0);
-				cursor.setVisible(true);
-				cursor.setFocus();
-			}
-		});
 	}
 
 	private void createURLFields(Composite entry) {
@@ -579,9 +443,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 				nvpRequestHeaders);
 		insertNewRequestPostDataAction = new InsertTableRowAction(
 				nvpRequestPostData);
-		deleteRequestHeaderAction = new DeleteTableRowAction(nvpRequestHeaders);
+		deleteRequestHeaderAction = new DeleteTableRowAction(tvRequestHeaders);
 		deleteRequestPostDataAction = new DeleteTableRowAction(
-				nvpRequestPostData);
+				tvRequestPostData);
 		invokeURLAction = new InvokeURLAction(this);
 	}
 
@@ -616,8 +480,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	public Map<String, String> getRequestHttpHeaders() {
 		Map<String, String> headers = new HashMap<String, String>();
 
-		for (TableItem ti : tblRequestHeaders.getItems()) {
-			headers.put(ti.getText(0), ti.getText(1));
+		for (NameValuePair nvp : nvpRequestHeaders.getNameValuePairs()) {
+			headers.put(nvp.getName(), nvp.getValue());
 		}
 
 		return headers;
@@ -626,10 +490,10 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	public Map<String, String> getRequestPostDataFields() {
 		Map<String, String> headers = new HashMap<String, String>();
 
-		for (TableItem ti : tblRequestPostData.getItems()) {
-			headers.put(ti.getText(0), ti.getText(1));
+		for (NameValuePair nvp : nvpRequestPostData.getNameValuePairs()) {
+			headers.put(nvp.getName(), nvp.getValue());
 		}
-
+		
 		return headers;
 	}
 

@@ -1,18 +1,20 @@
 package com.hephaestus.http.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.hephaestus.http.views.NameValuePair;
 import com.hephaestus.http.views.NameValuePairs;
 
 public class DeleteTableRowAction extends Action {
 
-	private NameValuePairs pairs;
+	private TableViewer table;
 
-	public DeleteTableRowAction(NameValuePairs pairs) {
-		this.pairs = pairs;
+	public DeleteTableRowAction(TableViewer table) {
+		this.table = table;
 		setText("Delete");
 		setToolTipText("Delete Row(s)");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
@@ -21,7 +23,10 @@ public class DeleteTableRowAction extends Action {
 
 	@Override
 	public void run() {
-//		int[] selectedItems = tbl.getSelectionIndices();
-//		tbl.remove(selectedItems);
+		NameValuePairs pairs = (NameValuePairs) table.getInput();
+		IStructuredSelection sel = (IStructuredSelection) table.getSelection();
+		for (Object nvp : sel.toArray()) {
+			pairs.removeNameValuePair((NameValuePair) nvp);
+		}
 	}
 }
