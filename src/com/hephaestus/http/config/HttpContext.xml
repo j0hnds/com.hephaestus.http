@@ -3,6 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<!-- These beans are used by the InvokeURLAction. They define the
+		 necessary verb support. -->
 	<bean id="GET" class="com.eftps.http.invokers.GetMethodInvoker" />
 	<bean id="POST" class="com.eftps.http.invokers.PostMethodInvoker" />
 	<bean id="PUT" class="com.eftps.http.invokers.PutMethodInvoker" />

@@ -5,6 +5,11 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.hephaestus.http.views.HTTPViewData;
 
+/**
+ * An invoker for an HTTP Get method.
+ * 
+ * @author Dave Sieh
+ */
 public class GetMethodInvoker extends BaseHttpMethodInvoker {
 
 	public void invoke(HTTPViewData viewData) {

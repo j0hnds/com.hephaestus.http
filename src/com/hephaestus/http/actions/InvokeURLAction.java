@@ -8,10 +8,22 @@ import com.hephaestus.http.Activator;
 import com.hephaestus.http.invokers.HttpMethodInvoker;
 import com.hephaestus.http.views.HTTPViewData;
 
+/**
+ * This action is responsible for making the URL call defined by the HTTP method 
+ * information provided by the view data.
+ * 
+ * @author Dave Sieh
+ */
 public class InvokeURLAction extends Action {
 
+	// The view data
 	private HTTPViewData viewData;
 
+	/**
+	 * Constructs a new InvokeURLAction object for the specified view data.
+	 * 
+	 * @param viewData the view data
+	 */
 	public InvokeURLAction(HTTPViewData viewData) {
 		this.viewData = viewData;
 		setText("Invoke");

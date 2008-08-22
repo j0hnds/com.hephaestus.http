@@ -5,6 +5,11 @@ import org.apache.commons.httpclient.methods.PutMethod;
 
 import com.hephaestus.http.views.HTTPViewData;
 
+/**
+ * Invoker for an HTTP PUT
+ * 
+ * @author Dave Sieh
+ */
 public class PutMethodInvoker extends BaseEntityEnclosingMethodInvoker {
 
 	public void invoke(HTTPViewData viewData) {

@@ -5,6 +5,11 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.hephaestus.http.views.HTTPViewData;
 
+/**
+ * An invoker for an HTTP POST.
+ * 
+ * @author Dave Sieh
+ */
 public class PostMethodInvoker extends BaseEntityEnclosingMethodInvoker {
 
 	public void invoke(HTTPViewData viewData) {

@@ -9,10 +9,22 @@ import org.eclipse.ui.PlatformUI;
 import com.hephaestus.http.views.NameValuePair;
 import com.hephaestus.http.views.NameValuePairs;
 
+/**
+ * This action is responsible for the deletion of a row of data in a
+ * TableViewer.
+ * 
+ * @author Dave Sieh
+ */
 public class DeleteTableRowAction extends Action {
 
+	// The table viewer to delete the row from.
 	private TableViewer table;
 
+	/**
+	 * Constructs a new DeleteTableRowAction for the specified table.
+	 * 
+	 * @param table the table viewer to delete rows from.
+	 */
 	public DeleteTableRowAction(TableViewer table) {
 		this.table = table;
 		setText("Delete");

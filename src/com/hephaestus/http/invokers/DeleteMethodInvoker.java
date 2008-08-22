@@ -5,6 +5,11 @@ import org.apache.commons.httpclient.methods.DeleteMethod;
 
 import com.hephaestus.http.views.HTTPViewData;
 
+/**
+ * An invoker for an HTTP DELETE method.
+ * 
+ * @author Dave Sieh
+ */
 public class DeleteMethodInvoker extends BaseHttpMethodInvoker {
 
 	public void invoke(HTTPViewData viewData) {

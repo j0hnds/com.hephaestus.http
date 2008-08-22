@@ -7,10 +7,22 @@ import org.eclipse.ui.PlatformUI;
 import com.hephaestus.http.views.NameValuePair;
 import com.hephaestus.http.views.NameValuePairs;
 
+/**
+ * This action is responsible for adding new NameValuePair's to the
+ * list of NameValuePairs.
+ * 
+ * @author Dave Sieh
+ */
 public class InsertTableRowAction extends Action {
 
+	// The name value pairs being managed.
 	private NameValuePairs pairs;
 
+	/**
+	 * Constructs a new InsertTableRowAction object.
+	 * 
+	 * @param pairs the name value pairs being managed.
+	 */
 	public InsertTableRowAction(NameValuePairs pairs) {
 		this.pairs = pairs;
 		setText("Insert");

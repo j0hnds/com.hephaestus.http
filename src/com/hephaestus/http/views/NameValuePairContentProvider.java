@@ -4,13 +4,31 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 
+/**
+ * A Structured Content Provider for NameValuePairs.
+ * 
+ * @author Dave Sieh
+ * 
+ */
 public class NameValuePairContentProvider implements
 		IStructuredContentProvider, NameValuePairViewer {
 
+	// The name value pairs
 	private NameValuePairs pairs;
+
+	// The table viewer
 	private TableViewer tableViewer;
 
-	public NameValuePairContentProvider(NameValuePairs pairs, TableViewer tableViewer) {
+	/**
+	 * Constructs a new NameValuePairContentProvider.
+	 * 
+	 * @param pairs
+	 *            The name value pairs
+	 * @param tableViewer
+	 *            the table viewer
+	 */
+	public NameValuePairContentProvider(NameValuePairs pairs,
+			TableViewer tableViewer) {
 		this.pairs = pairs;
 		this.pairs.addChangeListener(this);
 		this.tableViewer = tableViewer;

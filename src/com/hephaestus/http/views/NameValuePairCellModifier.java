@@ -4,16 +4,32 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableItem;
 
+/**
+ * A Cell Modifier for Name Value Pair objects.
+ * 
+ * @author Dave Sieh
+ */
 public class NameValuePairCellModifier implements ICellModifier {
 
+	// The table viewer
 	private TableViewer tableViewer;
+	// The NameValuePairs.
 	private NameValuePairs pairs;
-	
-	public NameValuePairCellModifier(TableViewer tableViewer, NameValuePairs pairs) {
-		this.tableViewer = tableViewer; 
+
+	/**
+	 * Constructs a new NameValuePairCellModifier.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer to which the cell modifier is attached.
+	 * @param pairs
+	 *            the name value pairs.
+	 */
+	public NameValuePairCellModifier(TableViewer tableViewer,
+			NameValuePairs pairs) {
+		this.tableViewer = tableViewer;
 		this.pairs = pairs;
 	}
-	
+
 	public boolean canModify(Object element, String property) {
 		return true;
 	}
@@ -21,7 +37,7 @@ public class NameValuePairCellModifier implements ICellModifier {
 	public Object getValue(Object element, String property) {
 		Object value = null;
 		NameValuePair pair = (NameValuePair) element;
-		
+
 		switch (columnIndex(property)) {
 		case 0: // Name
 			value = pair.getName();
@@ -30,10 +46,9 @@ public class NameValuePairCellModifier implements ICellModifier {
 			value = pair.getValue();
 			break;
 		}
-		
+
 		return value;
 	}
-	
 
 	public void modify(Object element, String property, Object value) {
 		int index = columnIndex(property);
@@ -41,21 +56,28 @@ public class NameValuePairCellModifier implements ICellModifier {
 		TableItem ti = (TableItem) element;
 		NameValuePair nvp = (NameValuePair) ti.getData();
 		String valueString = null;
-		
+
 		switch (index) {
 		case 0: // Name
 			valueString = ((String) value).trim();
 			nvp.setName(valueString);
 			break;
-			
+
 		case 1: // Value
 			valueString = ((String) value).trim();
 			nvp.setValue(valueString);
 		}
-		
+
 		pairs.changeNameValuePair(nvp);
 	}
 
+	/**
+	 * Identify the column the specified property represents.
+	 * 
+	 * @param property
+	 *            the name of the column property
+	 * @return the index of the property
+	 */
 	private int columnIndex(String property) {
 		int index = 0;
 		for (Object columnName : tableViewer.getColumnProperties()) {

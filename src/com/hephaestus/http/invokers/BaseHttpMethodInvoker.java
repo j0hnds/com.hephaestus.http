@@ -16,28 +16,66 @@ import com.hephaestus.http.Activator;
 import com.hephaestus.http.preferences.PreferenceConstants;
 import com.hephaestus.http.views.HTTPViewData;
 
+/**
+ * Base implementation of the HttpMethodInvoker interface. This particular
+ * implementation uses commons-httpclient and provides the basic methods to
+ * support a variety of HTTP method types.
+ * 
+ * @author Dave Sieh
+ * 
+ */
 public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
-	
+
+	/**
+	 * Returns a configured HttpClient to the caller. This method will take all
+	 * plug-in defaults into account when constructing the client:
+	 * 
+	 * <ul>
+	 * <li>Proxy Settings</li>
+	 * </ul>
+	 * 
+	 * @return reference to a configured HttpClient
+	 */
 	protected HttpClient getClient() {
 		HttpClient client = new HttpClient();
 		Preferences prefs = Activator.getDefault().getPluginPreferences();
 		String proxy = prefs.getString(PreferenceConstants.P_PROXY_HOST_PORT);
 		if (proxy != null && proxy.length() > 0) {
 			String[] cmps = proxy.split(":");
-			client.getHostConfiguration().setProxy(cmps[0], Integer.parseInt(cmps[1]));
+			client.getHostConfiguration().setProxy(cmps[0],
+					Integer.parseInt(cmps[1]));
 		}
-		
+
 		return client;
 	}
 
-
-	protected void collectResponse(HttpMethod method, HTTPViewData viewData) throws IOException {
+	/**
+	 * Given the method after the URL invocation, collect up all the response
+	 * information and update the view data.
+	 * 
+	 * @param method
+	 *            the http method after the URL has been invoked.
+	 * @param viewData
+	 *            the view data to update
+	 * @throws IOException
+	 *             if there was an error reading the response data.
+	 */
+	protected void collectResponse(HttpMethod method, HTTPViewData viewData)
+			throws IOException {
 		viewData.setStatus(Integer.toString(method.getStatusCode()));
 		viewData.setResponseData(getResponseBody(method));
 		viewData.setResponseHttpHeaders(getResponseHeaders(method));
 	}
 
-
+	/**
+	 * Returns the response body of the method invocation as a string.
+	 * 
+	 * @param method
+	 *            the http method
+	 * @return the text representation of the response
+	 * @throws IOException
+	 *             if there is an error reading the response body.
+	 */
 	private String getResponseBody(HttpMethod method) throws IOException {
 		InputStream is = method.getResponseBodyAsStream();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -51,6 +89,13 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 		return baos.toString();
 	}
 
+	/**
+	 * Retrieves a map of the response headers from the method.
+	 * 
+	 * @param method
+	 *            the http method
+	 * @return reference to a map of the response headers.
+	 */
 	private Map<String, String> getResponseHeaders(HttpMethod method) {
 		Map<String, String> headers = new HashMap<String, String>();
 
@@ -60,8 +105,17 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 
 		return headers;
 	}
-	
-	protected void populateMethodHeaders(HttpMethod method, HTTPViewData viewData) {
+
+	/**
+	 * This method populates the request headers for the method.
+	 * 
+	 * @param method
+	 *            the method to populate
+	 * @param viewData
+	 *            reference to the view data to get the header data.
+	 */
+	protected void populateMethodHeaders(HttpMethod method,
+			HTTPViewData viewData) {
 		for (Entry<String, String> entry : viewData.getRequestHttpHeaders()
 				.entrySet()) {
 			method.addRequestHeader(entry.getKey(), entry.getValue());

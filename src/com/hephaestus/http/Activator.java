@@ -17,6 +17,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	
+	// The bean factory
 	private BeanFactory context;
 	
 	/**
