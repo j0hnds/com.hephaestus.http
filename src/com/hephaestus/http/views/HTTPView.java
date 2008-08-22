@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
@@ -15,7 +14,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.core.runtime.Preferences.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
@@ -23,8 +21,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
@@ -37,15 +33,10 @@ import com.hephaestus.http.actions.DeleteTableRowAction;
 import com.hephaestus.http.actions.InsertTableRowAction;
 import com.hephaestus.http.actions.InvokeURLAction;
 import com.hephaestus.http.preferences.PreferenceConstants;
+import com.hephaestus.http.views.ui.URLFields;
 
 public class HTTPView extends ViewPart implements HTTPViewData,
 		IPropertyChangeListener {
-
-	// The protocols loaded into the protocol drop-down
-	private static final String[] PROTOCOLS = { "http", "https" };
-
-	// The verbs loaded into the verb drop-down
-	private static final String[] VERBS = { "GET", "PUT", "POST", "DELETE" };
 
 	// The column properties
 	private static final String[] COLUMN_PROPERTIES = { "NAME", "VALUE" };
@@ -71,17 +62,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	// Action to invoke the URL
 	private Action invokeURLAction;
 
-	// Drop-down for method protocols
-	private Combo cbProtocol;
-
-	// Drop-down for host-ports
-	private Combo cbHostPort;
-
-	// Drop-down for URI's
-	private Combo cbURI;
-
-	// Drop-down for verbs
-	private Combo cbVerbs;
+	// The URL formulation control
+	private URLFields cmpURLFields;
 
 	// The table for request headers
 	private Table tblRequestHeaders;
@@ -155,7 +137,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		createResultFields(result);
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(cbProtocol,
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(cmpURLFields,
 				"com.hephaestus.http.viewer");
 		makeActions();
 		hookContextMenu();
@@ -262,7 +244,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		lblURL.setLayoutData(gd);
 
-		createURLFields(entry);
+		cmpURLFields = new URLFields(entry, SWT.NONE);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		cmpURLFields.setLayoutData(gd);
 
 		createInputDataFields(entry);
 	}
@@ -312,7 +296,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(cbHostPort.getShell(),
+				FileDialog dialog = new FileDialog(cmpURLFields.getShell(),
 						SWT.OPEN);
 				dialog.setFilterNames(new String[] { "All Files (*.*)" });
 				dialog.setFilterExtensions(new String[] { "*.*" });
@@ -440,45 +424,6 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		tvRequestHeaders.setInput(nvpRequestHeaders);
 	}
 
-	private void createURLFields(Composite entry) {
-		Composite fields = new Composite(entry, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		fields.setLayoutData(gd);
-		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
-		layout.center = true;
-		layout.fill = true;
-		layout.justify = false;
-		layout.pack = true;
-		layout.spacing = 5;
-		layout.wrap = true;
-		fields.setLayout(layout);
-
-		// Drop-down for verbs
-		cbVerbs = new Combo(fields, SWT.BORDER | SWT.READ_ONLY);
-		cbVerbs.setItems(VERBS);
-		cbVerbs.select(0);
-
-		// Drop-down for protocols
-		cbProtocol = new Combo(fields, SWT.BORDER | SWT.READ_ONLY);
-		cbProtocol.setItems(PROTOCOLS);
-		cbProtocol.select(0);
-
-		Label lblFirstDelimiter = new Label(fields, SWT.NONE);
-		lblFirstDelimiter.setText("://");
-
-		// Drop-down for host/ports
-		cbHostPort = new Combo(fields, SWT.BORDER | SWT.READ_ONLY);
-		RowData rd = new RowData();
-		rd.width = 200;
-		loadHostPortComboBox();
-
-		Label lblSecondDelimiter = new Label(fields, SWT.NONE);
-		lblSecondDelimiter.setText("/");
-
-		cbURI = new Combo(fields, SWT.BORDER);
-		cbURI.setLayoutData(rd);
-	}
-
 	/**
 	 * Hooks up a context menu to the two editable tables.
 	 */
@@ -555,14 +500,14 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public void showErrorMessage(String message) {
-		MessageDialog.openError(cbProtocol.getShell(), "HTTP Test", message);
+		MessageDialog.openError(cmpURLFields.getShell(), "HTTP Test", message);
 	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		cbURI.setFocus();
+		cmpURLFields.setFocus();
 	}
 
 	// Implementation of HTTPViewData
@@ -591,14 +536,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public String getURL() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(cbProtocol.getText());
-		sb.append("://");
-		sb.append(cbHostPort.getText());
-		sb.append("/");
-		sb.append(cbURI.getText());
-
-		return sb.toString();
+		return cmpURLFields.getURL();
 	}
 
 	public void setResponseData(String data) {
@@ -619,35 +557,21 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		tfStatus.setText(status);
 		// If we got here, we didn't get an error, so save off the
 		// value of the URI we used in the combo box.
-		String uri = cbURI.getText();
-		if (cbURI.indexOf(uri) < 0) {
-			cbURI.add(uri);
-		}
+		cmpURLFields.saveCurrentURI();
 	}
 
 	public String getVerb() {
-		return cbVerbs.getText();
+		return cmpURLFields.getVerb();
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
 		if (PreferenceConstants.P_HOST_PORTS.equals(event.getProperty())) {
-			resetHostPortComboBox();
+			resetHostPorts();
 		}
 	}
 
-	private void resetHostPortComboBox() {
-		cbHostPort.removeAll();
-		loadHostPortComboBox();
-	}
-
-	private void loadHostPortComboBox() {
-		Preferences store = Activator.getDefault().getPluginPreferences();
-
-		String hpString = store.getString(PreferenceConstants.P_HOST_PORTS);
-		cbHostPort.setItems(hpString.split("\\|"));
-		if (cbHostPort.getItemCount() > 0) {
-			cbHostPort.select(0);
-		}
+	private void resetHostPorts() {
+		cmpURLFields.resetHostPorts();
 	}
 
 	public String getContentType() {
@@ -658,21 +582,21 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		boolean valid = true;
 
 		// Make sure there is a protocol selected
-		String protocol = cbProtocol.getText();
+		String protocol = cmpURLFields.getProtocol();
 		if (protocol == null || protocol.length() == 0) {
 			showErrorMessage("Must select a protocol");
 			valid = false;
 		}
 
 		// Make sure there is a host:port selected
-		String hostPort = cbHostPort.getText();
+		String hostPort = cmpURLFields.getHostPort();
 		if (hostPort == null || hostPort.length() == 0) {
 			showErrorMessage("Must select a host:port");
 			valid = false;
 		}
 
 		// Make sure there is a verb provided
-		String verb = cbVerbs.getText();
+		String verb = cmpURLFields.getVerb();
 		if (verb == null || verb.length() == 0) {
 			showErrorMessage("Must select a verb");
 			valid = false;
