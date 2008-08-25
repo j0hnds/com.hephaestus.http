@@ -125,17 +125,18 @@ public class RequestData extends Composite {
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		tf.setLayoutData(gd);
 
-		// Create a tab item for Http Headers
-		createRequestHttpHeaders(tf);
+		// Create a tab item for bulk POST data
+		createRequestBulkPostData(tf);
 
 		// Create a tab item for normal POST Data (name/values)
 		createRequestPostData(tf);
 
-		// Create a tab item for bulk POST data
-		createRequestBulkPostData(tf);
-
 		// Create a tab item for File Upload
 		createRequestFileUpload(tf);
+
+		// Create a tab item for Http Headers
+		createRequestHttpHeaders(tf);
+
 	}
 	
 	private void createRequestFileUpload(TabFolder tabs) {

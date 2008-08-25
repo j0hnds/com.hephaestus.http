@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Import / Export</title>
+</head>
+
+<body>
+<h1>Import / Export</h1>
+
+<p>To make it more convenient to invoke HTTP requests over a period of time, the
+HTTPClient plugin allows you to save the settings for a particular HTTP request
+and load it at a later time.</p>
+
+<p>The settings saved in the export are:</p>
+
+<ol>
+<li>Full URL<ul>
+<li>Verb</li>
+<li>Protocol</li>
+<li>Host:port</li>
+<li>URI</li></ul></li>
+<li>HTTP Headers
+<li>POST/PUT RequestData<ul>
+<li>Form request data</li>
+<li>Bulk Data w/content type</li>
+<li>File Upload Path</li></ul></li>
+</ol>
+
+<p>To use this functionality, </p>
+
+<ol>
+<li>Set up the HTTP request as you would like it to be saved.</li>
+<li>Invoke the Export function (view tool bar <img src="../icons/door_out.png"> or 
+view drop-down menu "Export". A File Dialog will be displayed. Specify the location 
+and name of the file to save. A ".xml" extension will automatically be added to
+the file name if necessary.</li>
+</ol>
+
+<p>Now that the file has been saved, you can restore this request at any time
+by: </p>
+
+<ol>
+<li>Invoke the Import function (view tool bar <img src="../icons/door_in.png"> or
+view drop-down menu "Import". A File Dialog will be displayed. Specify the location
+and name of the file to import. Hit OK and the plugin view will be reset with
+the values saved in the file.</li>
+</ol>
+</body>
+</html>

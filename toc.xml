@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="HTTPClient" topic="html/toc.html">
+   <topic href="html/invokingrequest.html" label="Invoking A Request">
+   </topic>
+	<topic href="html/httpheaders.html" label="HTTP Headers">
+ </topic>
+	<topic label="Import / Export"  href="html/importexport.html"> 
+	</topic>
+</toc>
