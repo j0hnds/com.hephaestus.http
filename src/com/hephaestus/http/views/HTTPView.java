@@ -3,11 +3,18 @@ package com.hephaestus.http.views;
 import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
 import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.core.runtime.Preferences.PropertyChangeEvent;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.jface.action.*;
@@ -47,6 +54,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	
 	// The response data control
 	private ResponseData responseData;
+	
+	// Sash
+	private Sash sash;
 
 	/**
 	 * Constructs a new HTTPView object.
@@ -65,21 +75,55 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public void createPartControl(Composite parent) {
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		final Composite theParent = parent;
+		FormLayout layout = new FormLayout();
 		parent.setLayout(layout);
 
 		// Create a composite for the entry fields
 		Composite entry = new Composite(parent, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		entry.setLayoutData(gd);
 		createEntryFields(entry);
+		
+		sash = new Sash(parent, SWT.VERTICAL | SWT.BORDER);
 
 		// Create a composite for the result fields
 		Composite result = new Composite(parent, SWT.NONE);
-		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		result.setLayoutData(gd);
 		createResultFields(result);
+		
+		// Set up the form attachments
+		FormData fd = new FormData();
+		fd.left = new FormAttachment(0, 0);
+		fd.right = new FormAttachment(sash, 0);
+		fd.top = new FormAttachment(0, 0);
+		fd.bottom = new FormAttachment(100, 0);
+		entry.setLayoutData(fd);
+		
+		final int limit = 100, percent = 60;
+		final FormData sashData = new FormData();
+		sashData.left = new FormAttachment(percent, 0);
+		sashData.top = new FormAttachment(0, 0);
+		sashData.bottom = new FormAttachment(100, 0);
+		sash.setLayoutData(sashData);
+		sash.addListener(SWT.Selection, new Listener() {
+
+			public void handleEvent(Event event) {
+				Rectangle sashRect = sash.getBounds();
+				Rectangle shellRect = theParent.getClientArea();
+				int right = shellRect.width - sashRect.width - limit;
+				event.x = Math.max(Math.min(event.x, right), limit);
+				if (event.x != sashRect.x) {
+					sashData.left = new FormAttachment(0, event.x);
+					theParent.layout();
+				}
+			}
+			
+		});
+		
+		fd = new FormData();
+		fd.left = new FormAttachment(sash, 0);
+		fd.right = new FormAttachment(100, 0);
+		fd.top = new FormAttachment(0, 0);
+		fd.bottom = new FormAttachment(100, 0);
+		result.setLayoutData(fd);
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(cmpURLFields,
