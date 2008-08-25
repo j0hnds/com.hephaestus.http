@@ -75,11 +75,10 @@ public class URLFields extends Composite {
 
 		return sb.toString();
 	}
-	
+
 	/**
-	 * Saves the URI currently displayed in the text field of the URI
-	 * combo box. This allows the URI to subsequently selected from the
-	 * list if necessary.
+	 * Saves the URI currently displayed in the text field of the URI combo box.
+	 * This allows the URI to subsequently selected from the list if necessary.
 	 */
 	public final void saveCurrentURI() {
 		String uri = cbURI.getText();
@@ -88,7 +87,7 @@ public class URLFields extends Composite {
 		}
 
 	}
-	
+
 	/**
 	 * Returns the verb currently held by this control
 	 * 
@@ -97,7 +96,7 @@ public class URLFields extends Composite {
 	public final String getVerb() {
 		return cbVerbs.getText();
 	}
-	
+
 	/**
 	 * Create the controls within this composite.
 	 */
@@ -151,7 +150,7 @@ public class URLFields extends Composite {
 	public boolean setFocus() {
 		return cbURI.setFocus();
 	}
-	
+
 	/**
 	 * Resets the host:ports combo box back to the preferences.
 	 */
@@ -159,7 +158,7 @@ public class URLFields extends Composite {
 		cbHostPort.removeAll();
 		loadHostPortComboBox();
 	}
-	
+
 	/**
 	 * Returns the protocol specified by this control.
 	 * 
@@ -168,7 +167,7 @@ public class URLFields extends Composite {
 	public final String getProtocol() {
 		return cbProtocol.getText();
 	}
-	
+
 	/**
 	 * Returns the host:port specified by this control.
 	 * 
@@ -177,23 +176,52 @@ public class URLFields extends Composite {
 	public final String getHostPort() {
 		return cbHostPort.getText();
 	}
-	
+
+	/**
+	 * Gets the text in the URI field.
+	 * 
+	 * @return text value of the URI field
+	 */
 	public final String getURI() {
 		return cbURI.getText();
 	}
-	
+
+	/**
+	 * Sets the value in the HostPort field.
+	 * 
+	 * @param hostPort
+	 *            the host port value.
+	 */
 	public final void setHostPort(String hostPort) {
 		cbHostPort.setText(hostPort);
 	}
-	
+
+	/**
+	 * Sets the protocol shown in the protocol field.
+	 * 
+	 * @param protocol
+	 *            the value of the protocol
+	 */
 	public final void setProtocol(String protocol) {
 		cbProtocol.setText(protocol);
 	}
-	
+
+	/**
+	 * Sets the value of the URI in the field.
+	 * 
+	 * @param uri
+	 *            the URI value
+	 */
 	public final void setURI(String uri) {
 		cbURI.setText(uri);
 	}
-	
+
+	/**
+	 * Sets the value of the verb in the field.
+	 * 
+	 * @param verb
+	 *            the verb to display.
+	 */
 	public final void setVerb(String verb) {
 		cbVerbs.setText(verb);
 	}
