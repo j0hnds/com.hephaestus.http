@@ -63,8 +63,37 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 	protected void collectResponse(HttpMethod method, HTTPViewData viewData)
 			throws IOException {
 		viewData.setStatus(Integer.toString(method.getStatusCode()));
-		viewData.setResponseData(getResponseBody(method));
+		if (isTextContent(method)) {
+			viewData.setResponseData(getResponseBody(method));
+		}
+		else {
+			// Read the response bytes and throw them away.
+			getResponseBodyBytes(method);
+			viewData.setResponseData("*** BINARY DATA ***");
+		}
 		viewData.setResponseHttpHeaders(getResponseHeaders(method));
+	}
+
+	/**
+	 * Determines if the response of the method is a textual type.
+	 * 
+	 * @param method
+	 *            the http method.
+	 * @return true if the content type starts with 'text'.
+	 */
+	private boolean isTextContent(HttpMethod method) {
+		boolean textContent = false;
+
+		Header hContentType = method.getResponseHeader("Content-Type");
+		if (hContentType != null) {
+			String contentType = hContentType.getValue();
+			if (contentType != null && contentType.length() > 0) {
+				if (contentType.startsWith("text")) {
+					textContent = true;
+				}
+			}
+		}
+		return textContent;
 	}
 
 	/**
@@ -77,6 +106,20 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 	 *             if there is an error reading the response body.
 	 */
 	private String getResponseBody(HttpMethod method) throws IOException {
+		return getResponseBodyBytes(method).toString();
+	}
+
+	/**
+	 * Returns the response body of the method invocation as a byte stream.
+	 * 
+	 * @param method
+	 *            the http method
+	 * @return the byte array output stream of the response body
+	 * @throws IOException
+	 *             if there is an error reading the response body.
+	 */
+	private ByteArrayOutputStream getResponseBodyBytes(HttpMethod method)
+			throws IOException {
 		InputStream is = method.getResponseBodyAsStream();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
@@ -86,7 +129,7 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 			baos.write(buffer, 0, len);
 		}
 
-		return baos.toString();
+		return baos;
 	}
 
 	/**
