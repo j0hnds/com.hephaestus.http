@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.httpRequestData.BulkPostDataType;
@@ -43,8 +42,7 @@ public class ExportHttpRequestDataAction extends Action {
 		this.viewData = viewData;
 		setText("Export");
 		setToolTipText("Export HTTP Request Data");
-		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		setImageDescriptor(Activator.getImageDescriptor("icons/door_out.png"));
 
 	}
 

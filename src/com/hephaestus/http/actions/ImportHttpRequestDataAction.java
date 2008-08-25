@@ -7,7 +7,6 @@ import java.util.Map;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Activator;
@@ -38,8 +37,7 @@ public class ImportHttpRequestDataAction extends Action {
 		this.viewData = viewData;
 		setText("Import");
 		setToolTipText("Import HTTP Request Data");
-		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		setImageDescriptor(Activator.getImageDescriptor("icons/door_in.png"));
 
 	}
 

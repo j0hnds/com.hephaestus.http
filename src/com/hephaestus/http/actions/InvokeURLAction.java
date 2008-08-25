@@ -29,7 +29,7 @@ public class InvokeURLAction extends Action {
 		setText("Invoke");
 		setToolTipText("Invoke HTTP Request");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+				.getImageDescriptor(ISharedImages.IMG_TOOL_FORWARD));
 	}
 	
 	@Override

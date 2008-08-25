@@ -158,6 +158,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(invokeURLAction);
+		manager.add(new Separator());
+		manager.add(importURLAction);
+		manager.add(exportURLAction);
 	}
 
 	private void makeActions() {
