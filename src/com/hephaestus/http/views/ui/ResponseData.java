@@ -61,9 +61,9 @@ public class ResponseData extends Composite {
 		gd.heightHint = 100;
 		tabs.setLayoutData(gd);
 
-		createResultHttpHeaders(tabs);
-
 		createResultData(tabs);
+
+		createResultHttpHeaders(tabs);
 	}
 
 	/**
