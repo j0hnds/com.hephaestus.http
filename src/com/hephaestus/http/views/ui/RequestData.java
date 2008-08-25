@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -198,6 +199,7 @@ public class RequestData extends Composite {
 
 		tfBulkPostData = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
+		tfBulkPostData.setFont(new Font(tfBulkPostData.getDisplay(), "Courier", 10, 0));
 		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 2;
 		tfBulkPostData.setLayoutData(gd);

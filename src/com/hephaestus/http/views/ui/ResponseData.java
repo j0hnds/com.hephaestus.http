@@ -3,6 +3,7 @@ package com.hephaestus.http.views.ui;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -106,6 +107,7 @@ public class ResponseData extends Composite {
 
 		tfResultData = new Text(tabs, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
+		tfResultData.setFont(new Font(tfResultData.getDisplay(), "Courier", 10, 0));
 
 		item.setControl(tfResultData);
 	}
