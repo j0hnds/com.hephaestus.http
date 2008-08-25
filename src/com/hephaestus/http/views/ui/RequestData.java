@@ -2,6 +2,7 @@ package com.hephaestus.http.views.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -364,7 +365,42 @@ public class RequestData extends Composite {
 		return tfContentType.getText();
 	}
 	
+	public final void setContentType(String contentType) {
+		tfContentType.setText(contentType);
+	}
+	
 	public final String getFileUploadPath() {
 		return tfFileUploadPath.getText();
+	}
+	
+	public final void setFileUploadPath(String fileUploadPath) {
+		tfFileUploadPath.setText(fileUploadPath);
+	}
+	
+	public final void setBulkPostData(String postData) {
+		tfBulkPostData.setText(postData);
+	}
+	
+	public final void setRequestHttpHeaders(Map<String,String> headers) {
+		nvpRequestHeaders.removeAll();
+		for (Entry<String,String> entry : headers.entrySet()) {
+			nvpRequestHeaders.addNameValuePair(new NameValuePair(entry.getKey(), entry.getValue()));
+		}
+	}
+	
+	public final void setRequestPostDataFields(Map<String,String> data) {
+		nvpRequestPostData.removeAll();
+		for (Entry<String,String> entry : data.entrySet()) {
+			nvpRequestPostData.addNameValuePair(new NameValuePair(entry.getKey(), entry.getValue()));
+		}
+	}
+	
+	public final void clearInputs() {
+		nvpRequestHeaders.removeAll();
+		nvpRequestPostData.removeAll();
+		
+		tfContentType.setText("");
+		tfBulkPostData.setText("");
+		tfFileUploadPath.setText("");
 	}
 }

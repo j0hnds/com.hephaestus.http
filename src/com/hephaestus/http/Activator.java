@@ -20,6 +20,9 @@ public class Activator extends AbstractUIPlugin {
 	// The bean factory
 	private BeanFactory context;
 	
+	// Import/Export path
+	private String importExportPath = "C:/";
+	
 	/**
 	 * The constructor
 	 */
@@ -83,5 +86,13 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public BeanFactory getBeanFactory() {
 		return context;
+	}
+
+	public String getImportExportPath() {
+		return importExportPath;
+	}
+
+	public void setImportExportPath(String importExportPath) {
+		this.importExportPath = importExportPath;
 	}
 }

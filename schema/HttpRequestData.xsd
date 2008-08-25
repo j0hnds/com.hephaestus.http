@@ -6,7 +6,7 @@
 			<element name="Headers" type="tns:PostDataType" />
 			<choice>
 				<element name="FileUpload" type="tns:FileUploadType" />
-				<element name="BulkPostData" type="string" />
+				<element name="BulkPostData" type="tns:BulkPostDataType" />
 				<element name="PostData" type="tns:PostDataType" />
 			</choice>
 		</sequence>
@@ -14,6 +14,13 @@
 		<attribute name="protocol" type="string" />
 		<attribute name="hostport" type="string" />
 		<attribute name="uri" type="string" />
+	</complexType>
+	<complexType name="BulkPostDataType" >
+		<simpleContent>
+			<extension base="string">
+				<attribute name="contentType" type="string"/>
+			</extension>
+		</simpleContent>
 	</complexType>
 	<complexType name="FileUploadType">
 		<attribute name="path" type="string"/>

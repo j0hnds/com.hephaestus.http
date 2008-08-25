@@ -125,7 +125,7 @@ public class URLFields extends Composite {
 		lblFirstDelimiter.setText("://");
 
 		// Drop-down for host/ports
-		cbHostPort = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+		cbHostPort = new Combo(this, SWT.BORDER);
 		RowData rd = new RowData();
 		rd.width = 200;
 		loadHostPortComboBox();
@@ -176,5 +176,25 @@ public class URLFields extends Composite {
 	 */
 	public final String getHostPort() {
 		return cbHostPort.getText();
+	}
+	
+	public final String getURI() {
+		return cbURI.getText();
+	}
+	
+	public final void setHostPort(String hostPort) {
+		cbHostPort.setText(hostPort);
+	}
+	
+	public final void setProtocol(String protocol) {
+		cbProtocol.setText(protocol);
+	}
+	
+	public final void setURI(String uri) {
+		cbURI.setText(uri);
+	}
+	
+	public final void setVerb(String verb) {
+		cbVerbs.setText(verb);
 	}
 }

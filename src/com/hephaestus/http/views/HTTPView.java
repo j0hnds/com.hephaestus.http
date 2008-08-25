@@ -16,6 +16,8 @@ import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.actions.ExportHttpRequestDataAction;
+import com.hephaestus.http.actions.ImportHttpRequestDataAction;
 import com.hephaestus.http.actions.InvokeURLAction;
 import com.hephaestus.http.preferences.PreferenceConstants;
 import com.hephaestus.http.views.ui.RequestData;
@@ -27,6 +29,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	// Action to invoke the URL
 	private Action invokeURLAction;
+	
+	// Action to export the URL data
+	private Action exportURLAction;
+	
+	// Action to import the URL data
+	private Action importURLAction;
 
 	// The URL formulation control
 	private URLFields cmpURLFields;
@@ -144,6 +152,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(invokeURLAction);
 		manager.add(new Separator());
+		manager.add(importURLAction);
+		manager.add(exportURLAction);
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
@@ -152,6 +162,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	private void makeActions() {
 		invokeURLAction = new InvokeURLAction(this);
+		importURLAction = new ImportHttpRequestDataAction(this);
+		exportURLAction = new ExportHttpRequestDataAction(this);
 	}
 
 	public void showErrorMessage(String message) {
@@ -276,4 +288,55 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		return requestData.getFileUploadPath();
 	}
 
+	public String getHostPort() {
+		return cmpURLFields.getHostPort();
+	}
+
+	public String getProtocol() {
+		return cmpURLFields.getProtocol();
+	}
+
+	public String getURI() {
+		return cmpURLFields.getURI();
+	}
+
+	public void setBulkPostData(String postData) {
+		requestData.setBulkPostData(postData);
+	}
+
+	public void setContentType(String contentType) {
+		requestData.setContentType(contentType);
+	}
+
+	public void setFileUploadPath(String path) {
+		requestData.setFileUploadPath(path);
+	}
+
+	public void setHostPort(String hostPort) {
+		cmpURLFields.setHostPort(hostPort);
+	}
+
+	public void setProtocol(String protocol) {
+		cmpURLFields.setProtocol(protocol);
+	}
+
+	public void setRequestHttpHeaders(Map<String, String> headers) {
+		requestData.setRequestHttpHeaders(headers);
+	}
+
+	public void setRequestPostDataFields(Map<String, String> postData) {
+		requestData.setRequestPostDataFields(postData);
+	}
+
+	public void setURI(String uri) {
+		cmpURLFields.setURI(uri);
+	}
+
+	public void setVerb(String verb) {
+		cmpURLFields.setVerb(verb);
+	}
+
+	public void clearInputs() {
+		requestData.clearInputs();
+	}
 }
