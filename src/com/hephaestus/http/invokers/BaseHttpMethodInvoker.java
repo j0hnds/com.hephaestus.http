@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.Preferences;
 
 import com.hephaestus.http.Activator;
 import com.hephaestus.http.preferences.PreferenceConstants;
+import com.hephaestus.http.util.NumberUtils;
 import com.hephaestus.http.views.HTTPViewData;
 
 /**
@@ -68,8 +69,9 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 		}
 		else {
 			// Read the response bytes and throw them away.
-			getResponseBodyBytes(method);
-			viewData.setResponseData("*** BINARY DATA ***");
+			String hexDump = NumberUtils.formatHexDump(getResponseBodyBytes(
+					method).toByteArray());
+			viewData.setResponseData(hexDump);
 		}
 		viewData.setResponseHttpHeaders(getResponseHeaders(method));
 	}
