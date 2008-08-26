@@ -7,7 +7,6 @@
 	
 	<property name="lib.dir" value="lib" />
 	<property name="schema.dir" value="schema" />
-	<property name="bin.dir" value="bin" />
 	<property name="tmp.dir" value="tmp" />
 	<property name="tmp.src.dir" value="${tmp.dir}/src" />
 	<property name="tmp.bin.dir" value="${tmp.dir}/bin" />
@@ -26,8 +25,8 @@
 			<classpath>
 				<pathelement location="${lib.dir}/xbean.bea.1.0.jar"/>
 			</classpath>
-			<arg line="-src ${tmp.dir}" />
-			<arg line="-d ${bin.dir}" />
+			<arg line="-src ${tmp.src.dir}" />
+			<arg line="-d ${tmp.bin.dir}" />
 			<arg line="-out ${lib.dir}/${ant.project.name}.jar" />
 			<arg path="${schema.dir}" />
 		</java>
