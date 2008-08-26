@@ -19,7 +19,7 @@ public final class NameValuePairLabelProvider extends LabelProvider implements
 	}
 
 	public String getColumnText(Object element, int columnIndex) {
-		String result = "";
+		String result = ""; //$NON-NLS-1$
 		
 		NameValuePair nvp = (NameValuePair) element;
 		switch (columnIndex) {

@@ -42,7 +42,7 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 		Preferences prefs = Activator.getDefault().getPluginPreferences();
 		String proxy = prefs.getString(PreferenceConstants.P_PROXY_HOST_PORT);
 		if (proxy != null && proxy.length() > 0) {
-			String[] cmps = proxy.split(":");
+			String[] cmps = proxy.split(":"); //$NON-NLS-1$
 			client.getHostConfiguration().setProxy(cmps[0],
 					Integer.parseInt(cmps[1]));
 		}
@@ -86,11 +86,11 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 	private boolean isTextContent(HttpMethod method) {
 		boolean textContent = false;
 
-		Header hContentType = method.getResponseHeader("Content-Type");
+		Header hContentType = method.getResponseHeader("Content-Type"); //$NON-NLS-1$
 		if (hContentType != null) {
 			String contentType = hContentType.getValue();
 			if (contentType != null && contentType.length() > 0) {
-				if (contentType.startsWith("text")) {
+				if (contentType.startsWith("text")) { //$NON-NLS-1$
 					textContent = true;
 				}
 			}

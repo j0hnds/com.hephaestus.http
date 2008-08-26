@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.actions.DeleteAllTableRowsAction;
 import com.hephaestus.http.actions.DeleteTableRowAction;
 import com.hephaestus.http.actions.InsertTableRowAction;
@@ -50,7 +51,7 @@ import com.hephaestus.http.views.NameValuePairLabelProvider;
 public class RequestData extends Composite {
 
 	// The column properties
-	private static final String[] COLUMN_PROPERTIES = { "NAME", "VALUE" };
+	private static final String[] COLUMN_PROPERTIES = { "NAME", "VALUE" }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	// The text field for the file upload path
 	private Text tfFileUploadPath;
@@ -141,7 +142,7 @@ public class RequestData extends Composite {
 	
 	private void createRequestFileUpload(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("File Upload");
+		item.setText(Messages.getString("RequestData.FileUploadTabText")); //$NON-NLS-1$
 
 		Composite fields = new Composite(tabs, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -153,7 +154,7 @@ public class RequestData extends Composite {
 		tfFileUploadPath.setLayoutData(gd);
 
 		Button btn = new Button(fields, SWT.PUSH);
-		btn.setText("...");
+		btn.setText("..."); //$NON-NLS-1$
 		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		btn.setLayoutData(gd);
 		btn.addSelectionListener(new SelectionListener() {
@@ -166,9 +167,9 @@ public class RequestData extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dialog = new FileDialog(getShell(),
 						SWT.OPEN);
-				dialog.setFilterNames(new String[] { "All Files (*.*)" });
-				dialog.setFilterExtensions(new String[] { "*.*" });
-				dialog.setFilterPath("C:/");
+				dialog.setFilterNames(new String[] { Messages.getString("RequestData.FilterNames") }); //$NON-NLS-1$
+				dialog.setFilterExtensions(new String[] { "*.*" }); //$NON-NLS-1$
+				dialog.setFilterPath("C:/"); //$NON-NLS-1$
 				String path = dialog.open();
 				if (path != null) {
 					tfFileUploadPath.setText(path);
@@ -187,10 +188,10 @@ public class RequestData extends Composite {
 		cmp.setLayout(layout);
 
 		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("Bulk POST Data");
+		item.setText(Messages.getString("RequestData.BulkPOSTDataTabText")); //$NON-NLS-1$
 
 		Label lblContentType = new Label(cmp, SWT.NONE);
-		lblContentType.setText("Content Type:");
+		lblContentType.setText(Messages.getString("RequestData.ContentTypeLabel")); //$NON-NLS-1$
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		lblContentType.setLayoutData(gd);
 
@@ -200,7 +201,7 @@ public class RequestData extends Composite {
 
 		tfBulkPostData = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		tfBulkPostData.setFont(new Font(tfBulkPostData.getDisplay(), "Courier", 10, 0));
+		tfBulkPostData.setFont(new Font(tfBulkPostData.getDisplay(), "Courier", 10, 0)); //$NON-NLS-1$
 		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 2;
 		tfBulkPostData.setLayoutData(gd);
@@ -210,7 +211,7 @@ public class RequestData extends Composite {
 	
 	private void createRequestPostData(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("POST Data");
+		item.setText(Messages.getString("RequestData.POSTDataTabText")); //$NON-NLS-1$
 
 		// Set up a table to enter the headers
 		tblRequestPostData = new Table(tabs, SWT.SINGLE | SWT.BORDER
@@ -221,11 +222,11 @@ public class RequestData extends Composite {
 
 		// Set up the columns
 		TableColumn col = new TableColumn(tblRequestPostData, SWT.NONE);
-		col.setText("Field");
+		col.setText(Messages.getString("RequestData.POSTDataFieldColumnText")); //$NON-NLS-1$
 		col.setWidth(100);
 
 		col = new TableColumn(tblRequestPostData, SWT.NONE);
-		col.setText("Value");
+		col.setText(Messages.getString("RequestData.POSTDataValueColumnText")); //$NON-NLS-1$
 		col.setWidth(100);
 
 		item.setControl(tblRequestPostData);
@@ -253,7 +254,7 @@ public class RequestData extends Composite {
 
 	private void createRequestHttpHeaders(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("HTTP Headers");
+		item.setText(Messages.getString("RequestData.HTTPHeadersTabText")); //$NON-NLS-1$
 
 		// Set up a table to enter the headers
 		tblRequestHeaders = new Table(tabs, SWT.SINGLE | SWT.BORDER
@@ -264,11 +265,11 @@ public class RequestData extends Composite {
 
 		// Set up the columns
 		TableColumn col = new TableColumn(tblRequestHeaders, SWT.NONE);
-		col.setText("Header");
+		col.setText(Messages.getString("RequestData.HTTPHeadersHeaderColumnText")); //$NON-NLS-1$
 		col.setWidth(100);
 
 		col = new TableColumn(tblRequestHeaders, SWT.NONE);
-		col.setText("Value");
+		col.setText(Messages.getString("RequestData.HTTPHeadersValueColumnText")); //$NON-NLS-1$
 		col.setWidth(100);
 		item.setControl(tblRequestHeaders);
 
@@ -297,7 +298,7 @@ public class RequestData extends Composite {
 	 * Hooks up a context menu to the two editable tables.
 	 */
 	public final void hookContextMenu(IWorkbenchPartSite site) {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
@@ -402,8 +403,8 @@ public class RequestData extends Composite {
 		nvpRequestHeaders.removeAll();
 		nvpRequestPostData.removeAll();
 		
-		tfContentType.setText("");
-		tfBulkPostData.setText("");
-		tfFileUploadPath.setText("");
+		tfContentType.setText(""); //$NON-NLS-1$
+		tfBulkPostData.setText(""); //$NON-NLS-1$
+		tfFileUploadPath.setText(""); //$NON-NLS-1$
 	}
 }

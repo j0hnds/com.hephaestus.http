@@ -5,6 +5,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.model.NameValuePairs;
 
 /**
@@ -24,8 +25,8 @@ public class DeleteAllTableRowsAction extends Action {
 	 */
 	public DeleteAllTableRowsAction(TableViewer table) {
 		this.table = table;
-		setText("Delete All");
-		setToolTipText("Delete All Row(s)");
+		setText(Messages.getString("DeleteAllTableRowsAction.Text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("DeleteAllTableRowsAction.ToolTipText")); //$NON-NLS-1$
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 	}

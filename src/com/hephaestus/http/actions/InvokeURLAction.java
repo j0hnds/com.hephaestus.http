@@ -1,10 +1,13 @@
 package com.hephaestus.http.actions;
 
+import java.text.MessageFormat;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.invokers.HttpMethodInvoker;
 import com.hephaestus.http.views.HTTPViewData;
 
@@ -26,8 +29,8 @@ public class InvokeURLAction extends Action {
 	 */
 	public InvokeURLAction(HTTPViewData viewData) {
 		this.viewData = viewData;
-		setText("Invoke");
-		setToolTipText("Invoke HTTP Request");
+		setText(Messages.getString("InvokeURLAction.Text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("InvokeURLAction.ToolTipText")); //$NON-NLS-1$
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_TOOL_FORWARD));
 	}
@@ -47,7 +50,8 @@ public class InvokeURLAction extends Action {
 			invoker.invoke(viewData);
 		}
 		catch (Exception e) {
-			viewData.showErrorMessage("Error getting bean for verb (" + verb + "): " + e.getLocalizedMessage());
+			Object[] arguments = { verb, e.getLocalizedMessage() };
+			viewData.showErrorMessage(MessageFormat.format(Messages.getString("InvokeURLAction.BeanVerbError"), arguments)); //$NON-NLS-1$
 		} 
 
 	}

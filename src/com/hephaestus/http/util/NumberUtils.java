@@ -66,7 +66,7 @@ public class NumberUtils {
 		while (lengthLeft > 0) {
 			// Start with the index into the block of the dump
 			fmtBuffer.delete(0, fmtBuffer.length());
-			fmt.format("%07X", byteIndex);
+			fmt.format("%07X", byteIndex); //$NON-NLS-1$
 			sb.append(fmtBuffer.toString());
 
 			// Dump the next 16 bytes on the line
@@ -84,7 +84,7 @@ public class NumberUtils {
 				byteIndex += lengthToDump;
 
 			}
-			sb.append("\n");
+			sb.append("\n"); //$NON-NLS-1$
 		}
 
 		return sb.toString();

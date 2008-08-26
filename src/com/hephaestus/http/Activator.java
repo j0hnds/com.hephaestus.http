@@ -12,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.hephaestus.http";
+	public static final String PLUGIN_ID = "com.hephaestus.http"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
@@ -21,7 +21,7 @@ public class Activator extends AbstractUIPlugin {
 	private BeanFactory context;
 	
 	// Import/Export path
-	private String importExportPath = "C:/";
+	private String importExportPath = "C:/"; //$NON-NLS-1$
 	
 	/**
 	 * The constructor
@@ -39,10 +39,10 @@ public class Activator extends AbstractUIPlugin {
 		
 		// Load up the application context.
 		try {
-			this.context = new ClassPathXmlApplicationContext("/com.hephaestus/http/config/HttpContext.xml");
+			this.context = new ClassPathXmlApplicationContext("/com.hephaestus/http/config/HttpContext.xml"); //$NON-NLS-1$
 		}
 		catch (Exception e) {
-			System.out.println("Oops");
+			System.out.println(Messages.getString("Activator.ApplicationContextException")); //$NON-NLS-1$
 		}
 	}
 

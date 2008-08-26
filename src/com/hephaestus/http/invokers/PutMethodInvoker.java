@@ -1,8 +1,11 @@
 package com.hephaestus.http.invokers;
 
+import java.text.MessageFormat;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PutMethod;
 
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.views.HTTPViewData;
 
 /**
@@ -21,7 +24,8 @@ public class PutMethodInvoker extends BaseEntityEnclosingMethodInvoker {
 			populateEntity(method, viewData);
 		}
 		catch (Exception e1) {
-			viewData.showErrorMessage(e1.getLocalizedMessage());
+			Object[] arguments = { e1.getLocalizedMessage() };
+			viewData.showErrorMessage(MessageFormat.format(Messages.getString("PutMethodInvoker.EntityPopulationError") , arguments)); //$NON-NLS-1$
 		}
 
 		try {
@@ -30,7 +34,8 @@ public class PutMethodInvoker extends BaseEntityEnclosingMethodInvoker {
 			collectResponse(method, viewData);
 		}
 		catch (Exception e) {
-			viewData.showErrorMessage(e.getLocalizedMessage());
+			Object[] arguments = { e.getLocalizedMessage() };
+			viewData.showErrorMessage(MessageFormat.format(Messages.getString("PutMethodInvoker.InvocationError"), arguments)); //$NON-NLS-1$
 		}
 	}
 

@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.model.NameValuePair;
 import com.hephaestus.http.model.NameValuePairs;
 
@@ -27,8 +28,8 @@ public class DeleteTableRowAction extends Action {
 	 */
 	public DeleteTableRowAction(TableViewer table) {
 		this.table = table;
-		setText("Delete");
-		setToolTipText("Delete Row(s)");
+		setText(Messages.getString("DeleteTableRowAction.Text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("DeleteTableRowAction.ToolTipText")); //$NON-NLS-1$
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 	}

@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.Messages;
 
 /**
  * A PreferencePage implementation for HTTP preferences.
@@ -31,7 +32,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
 	private static final Pattern RE_HOST_PORT = Pattern
-			.compile("^[^:]+:[0-9]+$");
+			.compile("^[^:]+:[0-9]+$"); //$NON-NLS-1$
 	private Table tblHostPorts;
 	private Text tfProxy;
 
@@ -41,7 +42,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	public HttpPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("HTTP Preferences");
+		setDescription(Messages.getString("HttpPreferencePage.Description")); //$NON-NLS-1$
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Label lblHostPorts = new Label(parent, SWT.NONE);
-		lblHostPorts.setText("Registered Servers:");
+		lblHostPorts.setText(Messages.getString("HttpPreferencePage.HostPortLabel")); //$NON-NLS-1$
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		gd.horizontalSpan = 2;
 		lblHostPorts.setLayoutData(gd);
@@ -72,11 +73,11 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 
 		// Set up the columns
 		TableColumn col = new TableColumn(tblHostPorts, SWT.NONE);
-		col.setText("Host");
+		col.setText(Messages.getString("HttpPreferencePage.HostColumn")); //$NON-NLS-1$
 		col.setWidth(100);
 
 		col = new TableColumn(tblHostPorts, SWT.NONE);
-		col.setText("Port");
+		col.setText(Messages.getString("HttpPreferencePage.PortColumn")); //$NON-NLS-1$
 		col.setWidth(100);
 
 		loadHostPortsTable();
@@ -89,7 +90,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		buttons.setLayout(btnLayout);
 
 		Button btnAdd = new Button(buttons, SWT.PUSH);
-		btnAdd.setText("Add");
+		btnAdd.setText(Messages.getString("HttpPreferencePage.AddButtonText")); //$NON-NLS-1$
 		btnAdd.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -103,7 +104,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		});
 
 		Button btnDel = new Button(buttons, SWT.PUSH);
-		btnDel.setText("Delete");
+		btnDel.setText(Messages.getString("HttpPreferencePage.DeleteButtonText")); //$NON-NLS-1$
 		btnDel.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -117,7 +118,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		});
 
 		Label lblProxy = new Label(parent, SWT.NONE);
-		lblProxy.setText("Proxy:");
+		lblProxy.setText(Messages.getString("HttpPreferencePage.ProxyLabel")); //$NON-NLS-1$
 		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		lblProxy.setLayoutData(gd);
 
@@ -145,17 +146,17 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	 * Displays a dialog to have the user specify a new host:port.
 	 */
 	protected void addHostPortRow() {
-		InputDialog dlg = new InputDialog(getShell(), "Http Preferences",
-				"Enter the desired host:port", "", new IInputValidator() {
+		InputDialog dlg = new InputDialog(getShell(), Messages.getString("HttpPreferencePage.DialogTitle"), //$NON-NLS-1$
+				Messages.getString("HttpPreferencePage.DialogPrompt"), "", new IInputValidator() { //$NON-NLS-1$ //$NON-NLS-2$
 
 					public String isValid(String newText) {
 						String errorMessage = null;
 						if (newText == null || newText.length() == 0) {
-							errorMessage = "Must specify host:port";
+							errorMessage = Messages.getString("HttpPreferencePage.MissingHostPortError"); //$NON-NLS-1$
 						}
 
 						if (!RE_HOST_PORT.matcher(newText).matches()) {
-							errorMessage = "Entry must be of the form host:port";
+							errorMessage = Messages.getString("HttpPreferencePage.InvalidHostPortError"); //$NON-NLS-1$
 						}
 						return errorMessage;
 					}
@@ -165,7 +166,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		int status = dlg.open();
 		if (status == 0) {
 			String hostPort = dlg.getValue();
-			String[] cmps = hostPort.split(":");
+			String[] cmps = hostPort.split(":"); //$NON-NLS-1$
 			TableItem ti = new TableItem(tblHostPorts, SWT.NONE);
 			ti.setText(cmps);
 		}
@@ -212,10 +213,10 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		boolean firstItem = true;
 		for (TableItem ti : tblHostPorts.getItems()) {
 			if (!firstItem) {
-				sb.append("|");
+				sb.append("|"); //$NON-NLS-1$
 			}
 			sb.append(ti.getText(0));
-			sb.append(":");
+			sb.append(":"); //$NON-NLS-1$
 			sb.append(ti.getText(1));
 			firstItem = false;
 		}
@@ -250,9 +251,9 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	private void loadHostPorts(String hp) {
 		tblHostPorts.removeAll();
 		// Split the string on the '|' symbol
-		String[] hostPorts = hp.split("\\|");
+		String[] hostPorts = hp.split("\\|"); //$NON-NLS-1$
 		for (String hostPort : hostPorts) {
-			String[] cmps = hostPort.split(":");
+			String[] cmps = hostPort.split(":"); //$NON-NLS-1$
 			TableItem ti = new TableItem(tblHostPorts, SWT.NONE);
 			ti.setText(cmps);
 		}

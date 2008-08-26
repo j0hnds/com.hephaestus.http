@@ -27,10 +27,10 @@ public abstract class BaseEntityEnclosingMethodInvoker extends
 		BaseHttpMethodInvoker {
 
 	// The content type for form data
-	private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
+	private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded"; //$NON-NLS-1$
 
 	// The default encoding of the data
-	private static final String FORM_ENCODING = "UTF-8";
+	private static final String FORM_ENCODING = "UTF-8"; //$NON-NLS-1$
 
 	/**
 	 * Helper method to construct the entity for the method. This method

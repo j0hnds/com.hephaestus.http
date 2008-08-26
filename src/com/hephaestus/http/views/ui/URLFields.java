@@ -29,10 +29,10 @@ import com.hephaestus.http.preferences.PreferenceConstants;
 public class URLFields extends Composite {
 
 	// The protocols loaded into the protocol drop-down
-	private static final String[] PROTOCOLS = { "http", "https" };
+	private static final String[] PROTOCOLS = { "http", "https" }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	// The verbs loaded into the verb drop-down
-	private static final String[] VERBS = { "GET", "PUT", "POST", "DELETE" };
+	private static final String[] VERBS = { "GET", "PUT", "POST", "DELETE" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 	// Drop-down for verbs
 	private Combo cbVerbs;
@@ -68,9 +68,9 @@ public class URLFields extends Composite {
 	public final String getURL() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(cbProtocol.getText());
-		sb.append("://");
+		sb.append("://"); //$NON-NLS-1$
 		sb.append(cbHostPort.getText());
-		sb.append("/");
+		sb.append("/"); //$NON-NLS-1$
 		sb.append(cbURI.getText());
 
 		return sb.toString();
@@ -121,7 +121,7 @@ public class URLFields extends Composite {
 		cbProtocol.select(0);
 
 		Label lblFirstDelimiter = new Label(this, SWT.NONE);
-		lblFirstDelimiter.setText("://");
+		lblFirstDelimiter.setText("://"); //$NON-NLS-1$
 
 		// Drop-down for host/ports
 		cbHostPort = new Combo(this, SWT.BORDER);
@@ -130,7 +130,7 @@ public class URLFields extends Composite {
 		loadHostPortComboBox();
 
 		Label lblSecondDelimiter = new Label(this, SWT.NONE);
-		lblSecondDelimiter.setText("/");
+		lblSecondDelimiter.setText("/"); //$NON-NLS-1$
 
 		cbURI = new Combo(this, SWT.BORDER);
 		cbURI.setLayoutData(rd);
@@ -140,7 +140,7 @@ public class URLFields extends Composite {
 		Preferences store = Activator.getDefault().getPluginPreferences();
 
 		String hpString = store.getString(PreferenceConstants.P_HOST_PORTS);
-		cbHostPort.setItems(hpString.split("\\|"));
+		cbHostPort.setItems(hpString.split("\\|")); //$NON-NLS-1$
 		if (cbHostPort.getItemCount() > 0) {
 			cbHostPort.select(0);
 		}

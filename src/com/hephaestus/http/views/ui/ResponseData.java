@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.hephaestus.http.Messages;
+
 /**
  * This control encapsulates the results from an Http request.
  * 
@@ -75,7 +77,7 @@ public class ResponseData extends Composite {
 	 */
 	private void createResultHttpHeaders(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("HTTP Headers");
+		item.setText(Messages.getString("ResponseData.HTTPHeadersTabText")); //$NON-NLS-1$
 
 		// Set up a table to enter the headers
 		tblResultHeaders = new Table(tabs, SWT.MULTI | SWT.BORDER
@@ -85,11 +87,11 @@ public class ResponseData extends Composite {
 
 		// Set up the columns
 		TableColumn col = new TableColumn(tblResultHeaders, SWT.NONE);
-		col.setText("Header");
+		col.setText(Messages.getString("ResponseData.HTTPHeadersHeaderColumnText")); //$NON-NLS-1$
 		col.setWidth(100);
 
 		col = new TableColumn(tblResultHeaders, SWT.NONE);
-		col.setText("Value");
+		col.setText(Messages.getString("ResponseData.HTTPHeadersValueColumnText")); //$NON-NLS-1$
 		col.setWidth(100);
 		item.setControl(tblResultHeaders);
 
@@ -103,11 +105,11 @@ public class ResponseData extends Composite {
 	 */
 	private void createResultData(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
-		item.setText("Data");
+		item.setText(Messages.getString("ResponseData.DataTabText")); //$NON-NLS-1$
 
 		tfResultData = new Text(tabs, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		tfResultData.setFont(new Font(tfResultData.getDisplay(), "Courier", 10, 0));
+		tfResultData.setFont(new Font(tfResultData.getDisplay(), "Courier", 10, 0)); //$NON-NLS-1$
 
 		item.setControl(tfResultData);
 	}

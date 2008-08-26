@@ -2,6 +2,7 @@ package com.hephaestus.http.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.adapters.View2File;
 import com.hephaestus.http.views.HTTPViewData;
 
@@ -31,9 +33,9 @@ public class ExportHttpRequestDataAction extends Action {
 	 */
 	public ExportHttpRequestDataAction(HTTPViewData viewData) {
 		this.viewData = viewData;
-		setText("Export");
-		setToolTipText("Export HTTP Request Data");
-		setImageDescriptor(Activator.getImageDescriptor("icons/door_out.png"));
+		setText(Messages.getString("ExportHttpRequestDataAction.Text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("ExportHttpRequestDataAction.ToolTipText")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getImageDescriptor("icons/door_out.png")); //$NON-NLS-1$
 
 	}
 
@@ -43,8 +45,8 @@ public class ExportHttpRequestDataAction extends Action {
 		// the stuff.
 		FileDialog dlg = new FileDialog(PlatformUI.getWorkbench().getDisplay()
 				.getActiveShell(), SWT.SAVE);
-		dlg.setFilterNames(new String[] { "XML Files (*.xml)" });
-		dlg.setFilterExtensions(new String[] { "*.xml" });
+		dlg.setFilterNames(new String[] { Messages.getString("ExportHttpRequestDataAction.FilterNames") }); //$NON-NLS-1$
+		dlg.setFilterExtensions(new String[] { "*.xml" }); //$NON-NLS-1$
 		dlg.setFilterPath(Activator.getDefault().getImportExportPath());
 		String path = dlg.open();
 		if (path != null) {
@@ -56,8 +58,8 @@ public class ExportHttpRequestDataAction extends Action {
 				v2f.saveView(file);
 			}
 			catch (IOException e) {
-				viewData.showErrorMessage("Error saving export data (" + path
-						+ "):" + e.getLocalizedMessage());
+				Object[] arguments = { path, e.getLocalizedMessage() };
+				viewData.showErrorMessage(MessageFormat.format(Messages.getString("ExportHttpRequestDataAction.ExportError"), arguments)); //$NON-NLS-1$
 			}
 		}
 	}

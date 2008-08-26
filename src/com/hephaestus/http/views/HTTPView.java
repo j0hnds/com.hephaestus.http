@@ -23,6 +23,7 @@ import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.Messages;
 import com.hephaestus.http.actions.ExportHttpRequestDataAction;
 import com.hephaestus.http.actions.ImportHttpRequestDataAction;
 import com.hephaestus.http.actions.InvokeURLAction;
@@ -127,7 +128,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(cmpURLFields,
-				"com.hephaestus.http.viewer");
+				"com.hephaestus.http.viewer"); //$NON-NLS-1$
 		makeActions();
 		requestData.hookContextMenu(getSite());
 		contributeToActionBars();
@@ -146,7 +147,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		result.setLayout(layout);
 
 		Label lblStatusCode = new Label(result, SWT.NONE);
-		lblStatusCode.setText("Status:");
+		lblStatusCode.setText(Messages.getString("HTTPView.StatusLabel")); //$NON-NLS-1$
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		lblStatusCode.setLayoutData(gd);
 
@@ -172,7 +173,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		entry.setLayout(layout);
 
 		Label lblURL = new Label(entry, SWT.NONE);
-		lblURL.setText("URL:");
+		lblURL.setText(Messages.getString("HTTPView.URLLabel")); //$NON-NLS-1$
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		lblURL.setLayoutData(gd);
 
@@ -214,7 +215,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public void showErrorMessage(String message) {
-		MessageDialog.openError(cmpURLFields.getShell(), "HTTP Test", message);
+		MessageDialog.openError(cmpURLFields.getShell(), Messages.getString("HTTPView.ErrorDialogTitle"), message); //$NON-NLS-1$
 	}
 
 	/**
@@ -280,21 +281,21 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		// Make sure there is a protocol selected
 		String protocol = cmpURLFields.getProtocol();
 		if (protocol == null || protocol.length() == 0) {
-			showErrorMessage("Must select a protocol");
+			showErrorMessage(Messages.getString("HTTPView.MissingProtocolError")); //$NON-NLS-1$
 			valid = false;
 		}
 
 		// Make sure there is a host:port selected
 		String hostPort = cmpURLFields.getHostPort();
 		if (hostPort == null || hostPort.length() == 0) {
-			showErrorMessage("Must select a host:port");
+			showErrorMessage(Messages.getString("HTTPView.MissingHostPortError")); //$NON-NLS-1$
 			valid = false;
 		}
 
 		// Make sure there is a verb provided
 		String verb = cmpURLFields.getVerb();
 		if (verb == null || verb.length() == 0) {
-			showErrorMessage("Must select a verb");
+			showErrorMessage(Messages.getString("HTTPView.MissingVerbError")); //$NON-NLS-1$
 			valid = false;
 		}
 
@@ -305,7 +306,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		if (bulkData != null && bulkData.length() > 0) {
 			String contentType = requestData.getContentType();
 			if (contentType == null || contentType.length() == 0) {
-				showErrorMessage("Must specify a content type if bulk post data is provided");
+				showErrorMessage(Messages.getString("HTTPView.MissingContentTypeError")); //$NON-NLS-1$
 				valid = false;
 			}
 		}
@@ -315,15 +316,15 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		numInputs += ((fileUploadPath != null && fileUploadPath.length() > 0) ? 1
 				: 0);
 		if (numInputs > 1) {
-			showErrorMessage("Must provide only one of bulk post data, post data fields, or file upload path");
+			showErrorMessage(Messages.getString("HTTPView.TooManyDataTypesProvidedError")); //$NON-NLS-1$
 			valid = false;
 		}
 
-		if ("POST".equals(verb) || "PUT".equals(verb)) {
+		if ("POST".equals(verb) || "PUT".equals(verb)) { //$NON-NLS-1$ //$NON-NLS-2$
 			if ((bulkData == null || bulkData.length() == 0)
 					&& (getRequestPostDataFields().size() == 0)
 					&& (fileUploadPath == null || fileUploadPath.length() == 0)) {
-				showErrorMessage("Using verb POST or PUT without data being posted");
+				showErrorMessage(Messages.getString("HTTPView.POSTPUTNoDataError")); //$NON-NLS-1$
 				valid = false;
 			}
 		}
