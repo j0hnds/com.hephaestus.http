@@ -53,14 +53,14 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	public void createFieldEditors() {
 		Composite parent = new Composite(getFieldEditorParent(), SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Label lblHostPorts = new Label(parent, SWT.NONE);
 		lblHostPorts.setText(Messages.getString("HttpPreferencePage.HostPortLabel")); //$NON-NLS-1$
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		lblHostPorts.setLayoutData(gd);
 
 		tblHostPorts = new Table(parent, SWT.MULTI | SWT.BORDER
@@ -69,6 +69,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		tblHostPorts.setLinesVisible(true);
 		gd = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gd.heightHint = 200;
+		gd.horizontalSpan = 2;
 		tblHostPorts.setLayoutData(gd);
 
 		// Set up the columns
