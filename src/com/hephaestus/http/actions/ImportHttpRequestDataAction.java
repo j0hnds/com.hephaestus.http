@@ -100,7 +100,7 @@ public class ImportHttpRequestDataAction extends Action {
 				}
 			}
 			catch (Exception e) {
-				throw new RuntimeException("Error loading the import data", e);
+				viewData.showErrorMessage("Error loading the import data (" + path + "): " + e.getLocalizedMessage());
 			}
 		}
 

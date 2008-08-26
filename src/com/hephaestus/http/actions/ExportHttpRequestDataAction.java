@@ -99,7 +99,7 @@ public class ExportHttpRequestDataAction extends Action {
 				bw.close();
 			}
 			catch (IOException e) {
-				throw new RuntimeException("Error saving export data", e);
+				viewData.showErrorMessage("Error saving export data (" + path + "):" + e.getLocalizedMessage());
 			}
 		}
 	}

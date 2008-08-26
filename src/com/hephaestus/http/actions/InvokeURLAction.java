@@ -47,7 +47,7 @@ public class InvokeURLAction extends Action {
 			invoker.invoke(viewData);
 		}
 		catch (Exception e) {
-			// Ignore errors retrieving the bean; simply don't do anything
+			viewData.showErrorMessage("Error getting bean for verb (" + verb + "): " + e.getLocalizedMessage());
 		} 
 
 	}
