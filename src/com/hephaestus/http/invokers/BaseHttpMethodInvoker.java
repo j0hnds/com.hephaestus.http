@@ -63,7 +63,7 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 	 */
 	protected void collectResponse(HttpMethod method, HTTPViewData viewData)
 			throws IOException {
-		viewData.setStatus(Integer.toString(method.getStatusCode()));
+		viewData.setStatus(method.getStatusLine().toString());
 		if (isTextContent(method)) {
 			viewData.setResponseData(getResponseBody(method));
 		}
