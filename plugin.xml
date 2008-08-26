@@ -27,7 +27,16 @@
       <page
             class="com.hephaestus.http.preferences.HttpPreferencePage"
             id="com.hephaestus.http.preferences.HttpPreferencePage"
-            name="Http Preferences">
+            name="HTTP Client">
+         <keywordReference
+               id="com.hephaestus.http.host">
+         </keywordReference>
+         <keywordReference
+               id="com.hephaestus.http.port">
+         </keywordReference>
+         <keywordReference
+               id="com.hephaestus.http.proxy">
+         </keywordReference>
       </page>
    </extension>
    <extension
@@ -42,6 +51,23 @@
             file="toc.xml"
             primary="true">
       </toc>
+   </extension>
+   <extension
+         id="com.hephaestus.http.httpclientkeywords"
+         name="HTTP Client Keywords"
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="com.hephaestus.http.proxy"
+            label="Proxy">
+      </keyword>
+      <keyword
+            id="com.hephaestus.http.host"
+            label="Host">
+      </keyword>
+      <keyword
+            id="com.hephaestus.http.port"
+            label="Port">
+      </keyword>
    </extension>
 
 </plugin>

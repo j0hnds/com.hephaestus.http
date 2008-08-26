@@ -117,7 +117,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 				try {
 					Integer.parseInt((String) value);
 				} catch (NumberFormatException e) {
-					result = "Port must be a valid integer";
+					result = Messages.getString("HttpPreferencePage.PortNumberError"); //$NON-NLS-1$
 				}
 				
 				return result;
