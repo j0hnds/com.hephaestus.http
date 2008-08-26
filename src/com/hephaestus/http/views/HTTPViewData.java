@@ -22,6 +22,8 @@ public interface HTTPViewData {
 	void setHostPort(String hostPort);
 	String getURI();
 	void setURI(String uri);
+	String getUploadName();
+	void setUploadName(String uploadName);
 	
 	void setStatus(String status);
 	void setResponseHttpHeaders(Map<String, String> headers);

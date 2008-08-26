@@ -57,6 +57,7 @@ public abstract class BaseEntityEnclosingMethodInvoker extends
 		Map<String, String> postData = viewData.getRequestPostDataFields();
 		String bulkPostData = viewData.getBulkPostData();
 		String fileUploadPath = viewData.getFileUploadPath();
+		String fileUploadName = viewData.getUploadName();
 
 		if (!postData.isEmpty()) {
 			populateMethodPostData(method, postData);
@@ -66,7 +67,7 @@ public abstract class BaseEntityEnclosingMethodInvoker extends
 					.getContentType());
 		}
 		else if (fileUploadPath != null && fileUploadPath.length() > 0) {
-			populateMethodFileUploadData(method, fileUploadPath);
+			populateMethodFileUploadData(method, fileUploadName, fileUploadPath);
 		}
 	}
 
@@ -122,16 +123,26 @@ public abstract class BaseEntityEnclosingMethodInvoker extends
 	 * 
 	 * @param method
 	 *            the method.
+	 * @param fileUploadName
+	 *            the name to assign to the part.
 	 * @param fileUploadPath
 	 *            the path to the file to upload.
 	 * @throws FileNotFoundException
 	 *             if the file was not found.
 	 */
 	private void populateMethodFileUploadData(EntityEnclosingMethod method,
-			String fileUploadPath) throws FileNotFoundException {
+			String fileUploadName, String fileUploadPath)
+			throws FileNotFoundException {
 		if (fileUploadPath != null && fileUploadPath.length() > 0) {
+			String uploadName = null;
 			File path = new File(fileUploadPath);
-			Part[] parts = { new FilePart(path.getName(), path) };
+			if (fileUploadName != null && fileUploadName.length() > 0) {
+				uploadName = fileUploadName;
+			}
+			else {
+				uploadName = path.getName();
+			}
+			Part[] parts = { new FilePart(uploadName, path) };
 			method.setRequestEntity(new MultipartRequestEntity(parts, method
 					.getParams()));
 		}

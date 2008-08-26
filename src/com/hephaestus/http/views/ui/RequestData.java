@@ -61,6 +61,8 @@ public class RequestData extends Composite {
 	
 	// The text field for the content type of the bulk post data
 	private Text tfContentType;
+	
+	private Text tfUploadName;
 
 	// The table for request headers
 	private Table tblRequestHeaders;
@@ -146,11 +148,26 @@ public class RequestData extends Composite {
 
 		Composite fields = new Composite(tabs, SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		fields.setLayout(layout);
+		
+		Label lblUploadName = new Label(fields, SWT.NONE);
+		lblUploadName.setText(Messages.getString("RequestData.UploadName")); //$NON-NLS-1$
+		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblUploadName.setLayoutData(gd);
+		
+		tfUploadName = new Text(fields, SWT.BORDER | SWT.SINGLE);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gd.horizontalSpan = 2;
+		tfUploadName.setLayoutData(gd);
 
+		Label lblPath = new Label(fields, SWT.NONE);
+		lblPath.setText(Messages.getString("RequestData.UploadFile")); //$NON-NLS-1$
+		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblPath.setLayoutData(gd);
+		
 		tfFileUploadPath = new Text(fields, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		tfFileUploadPath.setLayoutData(gd);
 
 		Button btn = new Button(fields, SWT.PUSH);
@@ -406,5 +423,14 @@ public class RequestData extends Composite {
 		tfContentType.setText(""); //$NON-NLS-1$
 		tfBulkPostData.setText(""); //$NON-NLS-1$
 		tfFileUploadPath.setText(""); //$NON-NLS-1$
+		tfUploadName.setText(""); //$NON-NLS-1$
+	}
+	
+	public final String getUploadName() {
+		return tfUploadName.getText();
+	}
+	
+	public final void setUploadName(String uploadName) {
+		tfUploadName.setText(uploadName);
 	}
 }

@@ -398,4 +398,12 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	public void clearInputs() {
 		requestData.clearInputs();
 	}
+
+	public String getUploadName() {
+		return requestData.getUploadName();
+	}
+
+	public void setUploadName(String uploadName) {
+		requestData.setUploadName(uploadName);
+	}
 }
