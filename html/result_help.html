@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>HTTP Response Data</title>
+</head>
+
+<body>
+<h1>HTTP Response Data</h1>
+
+<p>The fields in this area allow you to view the results of invoking the
+HTTP Request. The following fields/tabs are available:</p>
+
+<dl>
+<dt>Status</dt>
+<dd>The HTTP Status code returned from the server. The following are 
+common Status Codes: <ul>
+<li><strong>100</strong> - Continue</li>
+<li><strong>101</strong> - Switching Protocols</li>
+<li><strong>200</strong> - OK</li>
+<li><strong>201</strong> - Created</li>
+<li><strong>202</strong> - Accepted</li>
+<li><strong>203</strong> - Non-Authoritative Information</li>
+<li><strong>204</strong> - No Content</li>
+<li><strong>205</strong> - Reset Content</li>
+<li><strong>206</strong> - Partial Content</li>
+<li><strong>300</strong> - Multiple Choices</li>
+<li><strong>301</strong> - Moved Permanently</li>
+<li><strong>302</strong> - Found</li>
+<li><strong>303</strong> - See Other</li>
+<li><strong>304</strong> - Not Modified</li>
+<li><strong>305</strong> - Use Proxy</li>
+<li><strong>306</strong> - Reserved (not used)</li>
+<li><strong>307</strong> - Temporary Redirect</li>
+<li><strong>400</strong> - Bad Request</li>
+<li><strong>401</strong> - Unauthorized</li>
+<li><strong>402</strong> - Payment requred (reserved)</li>
+<li><strong>403</strong> - Forbidden</li>
+<li><strong>404</strong> - Not Found</li>
+<li><strong>405</strong> - Method Not Allowed</li>
+<li><strong>406</strong> - Not Acceptable</li>
+<li><strong>407</strong> - Proxy Authentication Required</li>
+<li><strong>408</strong> - Request Timeout</li>
+<li><strong>409</strong> - Conflict</li>
+<li><strong>410</strong> - Gone</li>
+<li><strong>411</strong> - Length Required</li>
+<li><strong>412</strong> - Precondition Failed</li>
+<li><strong>413</strong> - Request Entity Too Large</li>
+<li><strong>414</strong> - Request-URI Too Long</li>
+<li><strong>415</strong> - Unsupported Media Type</li>
+<li><strong>416</strong> - Requested Range Not Satisfiable</li>
+<li><strong>417</strong> - Expectation Failed</li>
+<li><strong>500</strong> - Internal Server Error</li>
+<li><strong>501</strong> - Not Implemented</li>
+<li><strong>502</strong> - Bad Gateway</li>
+<li><strong>503</strong> - Service Unavailable</li>
+<li><strong>504</strong> - Gateway Timeout</li>
+<li><strong>505</strong> - HTTP Version Not Supported</li>
+</ul></dd>
+<dt>Data</dt>
+<dd>This tab displays the data received in the response. The type of 
+data displayed depends on what the server returns for a particular request. If
+the response has a <em>Content-Type</em> of <em>text/*</em>, the text of the response
+will be displayed. If the response <em>Content-Type</em> is of any other type,
+a hex-dump of the response data is displayed.</dd>
+<dt>HTTP Headers</dt>
+<dd>This tab displays the HTTP Headers returned in the response. The headers
+received are strictly determined by the response from the server.</dd>
+</dl>
+</body>
+</html>

@@ -37,10 +37,10 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	// Action to invoke the URL
 	private Action invokeURLAction;
-	
+
 	// Action to export the URL data
 	private Action exportURLAction;
-	
+
 	// Action to import the URL data
 	private Action importURLAction;
 
@@ -52,10 +52,10 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 	// The request data control
 	private RequestData requestData;
-	
+
 	// The response data control
 	private ResponseData responseData;
-	
+
 	// Sash
 	private Sash sash;
 
@@ -83,13 +83,13 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		// Create a composite for the entry fields
 		Composite entry = new Composite(parent, SWT.NONE);
 		createEntryFields(entry);
-		
+
 		sash = new Sash(parent, SWT.VERTICAL | SWT.BORDER);
 
 		// Create a composite for the result fields
 		Composite result = new Composite(parent, SWT.NONE);
 		createResultFields(result);
-		
+
 		// Set up the form attachments
 		FormData fd = new FormData();
 		fd.left = new FormAttachment(0, 0);
@@ -97,7 +97,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		fd.top = new FormAttachment(0, 0);
 		fd.bottom = new FormAttachment(100, 0);
 		entry.setLayoutData(fd);
-		
+
 		final int limit = 100, percent = 60;
 		final FormData sashData = new FormData();
 		sashData.left = new FormAttachment(percent, 0);
@@ -116,9 +116,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 					theParent.layout();
 				}
 			}
-			
+
 		});
-		
+
 		fd = new FormData();
 		fd.left = new FormAttachment(sash, 0);
 		fd.right = new FormAttachment(100, 0);
@@ -128,7 +128,11 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(cmpURLFields,
-				"com.hephaestus.http.viewer"); //$NON-NLS-1$
+				"com.hephaestus.http.url"); //$NON-NLS-1$
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(entry,
+				"com.hephaestus.http.entry"); //$NON-NLS-1$
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(result,
+				"com.hephaestus.http.result"); //$NON-NLS-1$
 		makeActions();
 		requestData.hookContextMenu(getSite());
 		contributeToActionBars();
@@ -165,7 +169,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	/**
 	 * Creates the entry fields.
 	 * 
-	 * @param entry the parent
+	 * @param entry
+	 *            the parent
 	 */
 	private void createEntryFields(Composite entry) {
 		GridLayout layout = new GridLayout();
@@ -215,7 +220,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	}
 
 	public void showErrorMessage(String message) {
-		MessageDialog.openError(cmpURLFields.getShell(), Messages.getString("HTTPView.ErrorDialogTitle"), message); //$NON-NLS-1$
+		MessageDialog.openError(cmpURLFields.getShell(), Messages
+				.getString("HTTPView.ErrorDialogTitle"), message); //$NON-NLS-1$
 	}
 
 	/**
@@ -281,14 +287,16 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		// Make sure there is a protocol selected
 		String protocol = cmpURLFields.getProtocol();
 		if (protocol == null || protocol.length() == 0) {
-			showErrorMessage(Messages.getString("HTTPView.MissingProtocolError")); //$NON-NLS-1$
+			showErrorMessage(Messages
+					.getString("HTTPView.MissingProtocolError")); //$NON-NLS-1$
 			valid = false;
 		}
 
 		// Make sure there is a host:port selected
 		String hostPort = cmpURLFields.getHostPort();
 		if (hostPort == null || hostPort.length() == 0) {
-			showErrorMessage(Messages.getString("HTTPView.MissingHostPortError")); //$NON-NLS-1$
+			showErrorMessage(Messages
+					.getString("HTTPView.MissingHostPortError")); //$NON-NLS-1$
 			valid = false;
 		}
 
@@ -306,7 +314,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		if (bulkData != null && bulkData.length() > 0) {
 			String contentType = requestData.getContentType();
 			if (contentType == null || contentType.length() == 0) {
-				showErrorMessage(Messages.getString("HTTPView.MissingContentTypeError")); //$NON-NLS-1$
+				showErrorMessage(Messages
+						.getString("HTTPView.MissingContentTypeError")); //$NON-NLS-1$
 				valid = false;
 			}
 		}
@@ -316,7 +325,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		numInputs += ((fileUploadPath != null && fileUploadPath.length() > 0) ? 1
 				: 0);
 		if (numInputs > 1) {
-			showErrorMessage(Messages.getString("HTTPView.TooManyDataTypesProvidedError")); //$NON-NLS-1$
+			showErrorMessage(Messages
+					.getString("HTTPView.TooManyDataTypesProvidedError")); //$NON-NLS-1$
 			valid = false;
 		}
 
@@ -324,7 +334,8 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 			if ((bulkData == null || bulkData.length() == 0)
 					&& (getRequestPostDataFields().size() == 0)
 					&& (fileUploadPath == null || fileUploadPath.length() == 0)) {
-				showErrorMessage(Messages.getString("HTTPView.POSTPUTNoDataError")); //$NON-NLS-1$
+				showErrorMessage(Messages
+						.getString("HTTPView.POSTPUTNoDataError")); //$NON-NLS-1$
 				valid = false;
 			}
 		}
