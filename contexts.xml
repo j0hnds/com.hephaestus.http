@@ -8,13 +8,19 @@
 	     		</with>
 			</enablement>
 		</topic>
+  <topic href="html/entry_help.html" label="Request Entry Help"/>
+  <topic href="html/result_help.html" label="Response Help"/>
 	</context>
  <context id="entry" title="HTTP Request Data">
     <description>Enter the data to be submitted with the request.</description>
     <topic href="html/entry_help.html" label="Request Entry Help"/>
+    <topic href="html/url_help.html" label="URL Help"/>
+    <topic href="html/result_help.html" label="Response Help"/>
  </context>
  <context id="result" title="HTTP Response Data">
     <description>Displays the results of the invocation of the HTTP Request</description>
     <topic href="html/result_help.html" label="Response Help"/>
+    <topic href="html/url_help.html" label="URL Help"/>
+    <topic href="html/entry_help.html" label="Request Entry Help"/>
  </context>
 </contexts>
