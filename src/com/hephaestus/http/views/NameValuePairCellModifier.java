@@ -62,13 +62,17 @@ public final class NameValuePairCellModifier implements ICellModifier {
 
 		switch (index) {
 		case 0: // Name
-			valueString = ((String) value).trim();
-			nvp.setName(valueString);
+			if (value != null) {
+				valueString = ((String) value).trim();
+				nvp.setName(valueString);
+			}
 			break;
 
 		case 1: // Value
-			valueString = ((String) value).trim();
-			nvp.setValue(valueString);
+			if (value != null) {
+				valueString = ((String) value).trim();
+				nvp.setValue(valueString);
+			}
 		}
 
 		pairs.changeNameValuePair(nvp);

@@ -5,6 +5,11 @@ import java.util.regex.Pattern;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.*;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -16,12 +21,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import com.hephaestus.http.Activator;
 import com.hephaestus.http.Messages;
+import com.hephaestus.http.model.NameValuePair;
+import com.hephaestus.http.model.NameValuePairs;
+import com.hephaestus.http.views.NameValuePairCellModifier;
+import com.hephaestus.http.views.NameValuePairContentProvider;
+import com.hephaestus.http.views.NameValuePairLabelProvider;
 
 /**
  * A PreferencePage implementation for HTTP preferences.
@@ -33,8 +42,14 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 
 	private static final Pattern RE_HOST_PORT = Pattern
 			.compile("^[^:]+:[0-9]+$"); //$NON-NLS-1$
+
+	// The column properties
+	private static final String[] COLUMN_PROPERTIES = { "NAME", "VALUE" }; //$NON-NLS-1$ //$NON-NLS-2$
+
 	private Table tblHostPorts;
 	private Text tfProxy;
+	private NameValuePairs nvpHostPorts;
+	private TableViewer tvHostPorts;
 
 	/**
 	 * Constructs a new HttpPreferencePage.
@@ -43,6 +58,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription(Messages.getString("HttpPreferencePage.Description")); //$NON-NLS-1$
+		nvpHostPorts = new NameValuePairs();
 	}
 
 	/**
@@ -80,6 +96,39 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		col = new TableColumn(tblHostPorts, SWT.NONE);
 		col.setText(Messages.getString("HttpPreferencePage.PortColumn")); //$NON-NLS-1$
 		col.setWidth(100);
+		
+		tvHostPorts = new TableViewer(tblHostPorts);
+		tvHostPorts.setLabelProvider(new NameValuePairLabelProvider());
+		tvHostPorts.setColumnProperties(COLUMN_PROPERTIES);
+
+		// Create the Cell Editors
+		CellEditor[] editors = new CellEditor[2];
+
+		TextCellEditor fieldEditor = new TextCellEditor(tblHostPorts);
+		editors[0] = fieldEditor;
+
+		TextCellEditor valueEditor = new TextCellEditor(tblHostPorts);
+		editors[1] = valueEditor;
+		valueEditor.setValidator(new ICellEditorValidator() {
+
+			public String isValid(Object value) {
+				String result = null;
+				
+				try {
+					Integer.parseInt((String) value);
+				} catch (NumberFormatException e) {
+					result = "Port must be a valid integer";
+				}
+				
+				return result;
+			}
+			
+		});
+
+		tvHostPorts.setCellEditors(editors);
+		tvHostPorts.setCellModifier(new NameValuePairCellModifier(tvHostPorts, nvpHostPorts));
+		tvHostPorts.setContentProvider(new NameValuePairContentProvider(nvpHostPorts, tvHostPorts));
+		tvHostPorts.setInput(nvpHostPorts);
 
 		loadHostPortsTable();
 
@@ -168,8 +217,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		if (status == 0) {
 			String hostPort = dlg.getValue();
 			String[] cmps = hostPort.split(":"); //$NON-NLS-1$
-			TableItem ti = new TableItem(tblHostPorts, SWT.NONE);
-			ti.setText(cmps);
+			nvpHostPorts.addNameValuePair(new NameValuePair(cmps[0], cmps[1]));
 		}
 	}
 
@@ -177,7 +225,10 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	 * Deletes the selected rows in the host:port table.
 	 */
 	protected void deleteSelectedHostPortRows() {
-		tblHostPorts.remove(tblHostPorts.getSelectionIndices());
+		IStructuredSelection sel = (IStructuredSelection) tvHostPorts.getSelection();
+		for (Object nvp : sel.toArray()) {
+			nvpHostPorts.removeNameValuePair((NameValuePair) nvp);
+		}
 	}
 
 	/**
@@ -212,13 +263,13 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	public boolean performOk() {
 		StringBuilder sb = new StringBuilder();
 		boolean firstItem = true;
-		for (TableItem ti : tblHostPorts.getItems()) {
+		for (NameValuePair nvp : nvpHostPorts.getNameValuePairs()) {
 			if (!firstItem) {
 				sb.append("|"); //$NON-NLS-1$
 			}
-			sb.append(ti.getText(0));
+			sb.append(nvp.getName());
 			sb.append(":"); //$NON-NLS-1$
-			sb.append(ti.getText(1));
+			sb.append(nvp.getValue());
 			firstItem = false;
 		}
 
@@ -250,13 +301,12 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	 *            preferences.
 	 */
 	private void loadHostPorts(String hp) {
-		tblHostPorts.removeAll();
+		nvpHostPorts.removeAll();
 		// Split the string on the '|' symbol
 		String[] hostPorts = hp.split("\\|"); //$NON-NLS-1$
 		for (String hostPort : hostPorts) {
 			String[] cmps = hostPort.split(":"); //$NON-NLS-1$
-			TableItem ti = new TableItem(tblHostPorts, SWT.NONE);
-			ti.setText(cmps);
+			nvpHostPorts.addNameValuePair(new NameValuePair(cmps[0], cmps[1]));
 		}
 	}
 
