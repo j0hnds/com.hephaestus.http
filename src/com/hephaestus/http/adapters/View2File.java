@@ -74,6 +74,7 @@ public class View2File {
 		String bulkPostData = viewData.getBulkPostData();
 		Map<String, String> postData = viewData.getRequestPostDataFields();
 		String fileUploadPath = viewData.getFileUploadPath();
+		String uploadName = viewData.getUploadName();
 		if (bulkPostData != null && bulkPostData.length() > 0) {
 			BulkPostDataType bpdt = rd.addNewBulkPostData();
 			bpdt.set(bulkPostData);
@@ -82,6 +83,9 @@ public class View2File {
 		else if (fileUploadPath != null && fileUploadPath.length() > 0) {
 			FileUploadType fut = rd.addNewFileUpload();
 			fut.setPath(fileUploadPath);
+			if (uploadName != null && uploadName.length() > 0) {
+				fut.setName(uploadName);
+			}
 		}
 		else if (postData.size() > 0) {
 			setNameValuePairs(postData, rd.addNewPostData());

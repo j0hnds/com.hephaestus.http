@@ -23,6 +23,7 @@
 		</simpleContent>
 	</complexType>
 	<complexType name="FileUploadType">
+		<attribute name="name" type="string"/>
 		<attribute name="path" type="string"/>
 	</complexType>
 	<complexType name="PostDataType">

@@ -91,6 +91,10 @@ public class File2View {
 			if (fileUploadPath != null && fileUploadPath.length() > 0) {
 				viewData.setFileUploadPath(fileUploadPath);
 			}
+			String uploadName = fut.getName();
+			if (uploadName != null && uploadName.length() > 0) {
+				viewData.setUploadName(uploadName);
+			}
 		}
 
 	}
