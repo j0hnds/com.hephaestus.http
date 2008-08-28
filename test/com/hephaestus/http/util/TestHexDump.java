@@ -30,7 +30,7 @@ public class TestHexDump {
 	public void testHexDump32() {
 		String dump = NumberUtils.formatHexDump(BUFFER_32);
 		assertEquals(
-				"0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f\n0000010 1011 1213 1415 1617 1819 1a1b 1c1d 1e1f\n", //$NON-NLS-1$
+				"0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f  ................\n0000010 1011 1213 1415 1617 1819 1a1b 1c1d 1e1f  ................\n", //$NON-NLS-1$
 				dump);
 	}
 
@@ -38,7 +38,7 @@ public class TestHexDump {
 	public void testHexDump31() {
 		String dump = NumberUtils.formatHexDump(BUFFER_31);
 		assertEquals(
-				"0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f\n0000010 1011 1213 1415 1617 1819 1a1b 1c1d 1e\n", //$NON-NLS-1$
+				"0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f  ................\n0000010 1011 1213 1415 1617 1819 1a1b 1c1d 1e    ............... \n", //$NON-NLS-1$
 				dump);
 	}
 
@@ -46,7 +46,7 @@ public class TestHexDump {
 	public void testHexDump30() {
 		String dump = NumberUtils.formatHexDump(BUFFER_30);
 		assertEquals(
-				"0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f\n0000010 1011 1213 1415 1617 1819 1a1b 1c1d\n", //$NON-NLS-1$
+				"0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f  ................\n0000010 1011 1213 1415 1617 1819 1a1b 1c1d       ..............  \n", //$NON-NLS-1$
 				dump);
 	}
 }
