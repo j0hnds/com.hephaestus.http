@@ -2,31 +2,42 @@ package com.hephaestus.http.views.ui;
 
 import java.util.Map;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPartSite;
 
 import com.hephaestus.http.Messages;
+import com.hephaestus.http.actions.CopyResponseDataAction;
+import com.hephaestus.http.actions.FormatXMLAction;
 
 /**
  * This control encapsulates the results from an Http request.
  * 
  * @author Dave Sieh
  */
-public class ResponseData extends Composite {
+public class ResponseData extends Composite implements ResponseDataAccess {
 
 	// The table for the result headers
 	private Table tblResultHeaders;
 	// The text field for the response data
 	private Text tfResultData;
+	// The action to format the results as XML
+	private Action formatXMLAction;
+	private Action copyResponseData;
 
 	/**
 	 * Constructs a new ResponseData control
@@ -67,6 +78,40 @@ public class ResponseData extends Composite {
 		createResultData(tabs);
 
 		createResultHttpHeaders(tabs);
+		
+		makeActions();
+	}
+
+	/**
+	 * Constructs the actions we need for this part of the view.
+	 */
+	private void makeActions() {
+		formatXMLAction = new FormatXMLAction(this);
+		copyResponseData = new CopyResponseDataAction(this);
+	}
+	
+	/**
+	 * Hooks up a context menu to the two editable tables.
+	 */
+	public final void hookContextMenu(IWorkbenchPartSite site) {
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				ResponseData.this.fillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(tfResultData);
+		tfResultData.setMenu(menu);
+//		tfResultData.
+//		site.registerContextMenu(menuMgr, tfResultData);
+
+	}
+	
+
+	protected void fillContextMenu(IMenuManager manager) {
+		manager.add(formatXMLAction);
+		manager.add(copyResponseData);
 	}
 
 	/**
@@ -112,6 +157,10 @@ public class ResponseData extends Composite {
 		tfResultData.setFont(new Font(tfResultData.getDisplay(), "Courier", 10, 0)); //$NON-NLS-1$
 
 		item.setControl(tfResultData);
+	}
+
+	public String getResponseData() {
+		return tfResultData.getText();
 	}
 
 }

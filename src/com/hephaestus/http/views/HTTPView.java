@@ -135,6 +135,7 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 				"com.hephaestus.http.result"); //$NON-NLS-1$
 		makeActions();
 		requestData.hookContextMenu(getSite());
+		responseData.hookContextMenu(getSite());
 		contributeToActionBars();
 	}
 
