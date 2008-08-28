@@ -9,8 +9,8 @@ import com.hephaestus.http.model.NameValuePair;
 import com.hephaestus.http.model.NameValuePairs;
 
 /**
- * This action is responsible for adding new NameValuePair's to the
- * list of NameValuePairs.
+ * This action is responsible for adding new NameValuePair's to the list of
+ * NameValuePairs.
  * 
  * @author Dave Sieh
  */
@@ -22,7 +22,8 @@ public class InsertTableRowAction extends Action {
 	/**
 	 * Constructs a new InsertTableRowAction object.
 	 * 
-	 * @param pairs the name value pairs being managed.
+	 * @param pairs
+	 *            the name value pairs being managed.
 	 */
 	public InsertTableRowAction(NameValuePairs pairs) {
 		this.pairs = pairs;
@@ -34,6 +35,8 @@ public class InsertTableRowAction extends Action {
 
 	@Override
 	public void run() {
-		pairs.addNameValuePair(new NameValuePair(Messages.getString("InsertTableRowAction.NVPName"), Messages.getString("InsertTableRowAction.NVPValue"))); //$NON-NLS-1$ //$NON-NLS-2$
+		pairs
+				.addNameValuePair(new NameValuePair(
+						Messages.getString("InsertTableRowAction.NVPName"), Messages.getString("InsertTableRowAction.NVPValue"))); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
