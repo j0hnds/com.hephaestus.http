@@ -14,8 +14,8 @@ import org.eclipse.core.runtime.Preferences;
 
 import com.hephaestus.http.Activator;
 import com.hephaestus.http.preferences.PreferenceConstants;
-import com.hephaestus.http.util.NumberUtils;
 import com.hephaestus.http.views.HTTPViewData;
+import com.hephaestus.util.NumberUtils;
 
 /**
  * Base implementation of the HttpMethodInvoker interface. This particular

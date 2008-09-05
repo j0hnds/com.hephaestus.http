@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/jdom.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/HttpRequestData.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xbean.bea.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring.jar"/>

@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.hephaestus.util.NumberUtils;
+
 public class TestHexDump {
 
 	private static final byte[] BUFFER_32 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,

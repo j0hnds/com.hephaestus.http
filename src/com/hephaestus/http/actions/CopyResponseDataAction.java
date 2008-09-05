@@ -7,8 +7,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Messages;
-import com.hephaestus.http.util.ClipboardUtil;
 import com.hephaestus.http.views.ui.ResponseDataAccess;
+import com.hephaestus.util.ClipboardUtil;
 
 public class CopyResponseDataAction extends Action {
 	
