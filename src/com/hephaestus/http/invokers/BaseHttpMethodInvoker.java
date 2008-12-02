@@ -49,6 +49,17 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 
 		return client;
 	}
+	
+	/**
+	 * Returns a flag indicating if the invoker will use Strict SSL handling or
+	 * not.
+	 * 
+	 * @return true if using strict SSL handling.
+	 */
+	protected boolean isStrictSSL() {
+		Preferences prefs = Activator.getDefault().getPluginPreferences();
+		return prefs.getBoolean(PreferenceConstants.P_STRICT_SSL);
+	}
 
 	/**
 	 * Given the method after the URL invocation, collect up all the response

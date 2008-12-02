@@ -50,6 +50,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	private Text tfProxy;
 	private NameValuePairs nvpHostPorts;
 	private TableViewer tvHostPorts;
+	private Button btnStrictSSL;
 
 	/**
 	 * Constructs a new HttpPreferencePage.
@@ -177,9 +178,34 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		tfProxy.setLayoutData(gd);
 
 		loadProxy();
+		
+		Label lblPlaceholder1 = new Label(parent, SWT.NONE);
+		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblPlaceholder1.setLayoutData(gd);
+
+		Label lblStrictSSL = new Label(parent, SWT.NONE);
+		lblStrictSSL.setText(Messages.getString("HttpPreferencePage.StrictSSLLabel")); //$NON-NLS-1$
+		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblStrictSSL.setLayoutData(gd);
+		
+		btnStrictSSL = new Button(parent, SWT.CHECK | SWT.RIGHT);
+		//btnStrictSSL.setText(Messages.getString("HttpPreferencePage.StrictSSLLabel")); //$NON-NLS-1$
+		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		gd.horizontalSpan = 2;
+		btnStrictSSL.setLayoutData(gd);
+		
+		loadStrictSSL();
 
 		parent.pack();
 
+	}
+
+	private void loadStrictSSL() {
+		IPreferenceStore store = getPreferenceStore();
+
+		boolean strict = store.getBoolean(PreferenceConstants.P_STRICT_SSL);
+		
+		btnStrictSSL.setSelection(strict);
 	}
 
 	/**
@@ -246,7 +272,16 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	protected void performDefaults() {
 		loadDefaultHostPorts();
 		loadDefaultProxy();
+		loadDefaultStrictSSL();
 		super.performDefaults();
+	}
+
+	private void loadDefaultStrictSSL() {
+		IPreferenceStore store = getPreferenceStore();
+
+		boolean strict = store.getDefaultBoolean(PreferenceConstants.P_STRICT_SSL);
+		
+		btnStrictSSL.setSelection(strict);
 	}
 
 	/**
@@ -279,6 +314,7 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		store
 				.setValue(PreferenceConstants.P_PROXY_HOST_PORT, tfProxy
 						.getText());
+		store.setValue(PreferenceConstants.P_STRICT_SSL, btnStrictSSL.getSelection());
 
 		return super.performOk();
 	}
