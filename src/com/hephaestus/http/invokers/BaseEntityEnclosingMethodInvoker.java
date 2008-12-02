@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -31,6 +32,12 @@ public abstract class BaseEntityEnclosingMethodInvoker extends
 
 	// The default encoding of the data
 	private static final String FORM_ENCODING = "UTF-8"; //$NON-NLS-1$
+
+	@Override
+	protected void populateRequestEntity(HttpMethod method,
+			HTTPViewData viewData) throws UnsupportedEncodingException, FileNotFoundException {
+		populateEntity((EntityEnclosingMethod) method, viewData);
+	}
 
 	/**
 	 * Helper method to construct the entity for the method. This method

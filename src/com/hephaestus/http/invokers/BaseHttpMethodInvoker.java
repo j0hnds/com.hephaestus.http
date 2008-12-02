@@ -1,8 +1,11 @@
 package com.hephaestus.http.invokers;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,9 +13,13 @@ import java.util.Map.Entry;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.eclipse.core.runtime.Preferences;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.Messages;
+import com.hephaestus.http.Protocols;
 import com.hephaestus.http.preferences.PreferenceConstants;
 import com.hephaestus.http.views.HTTPViewData;
 import com.hephaestus.util.NumberUtils;
@@ -25,7 +32,70 @@ import com.hephaestus.util.NumberUtils;
  * @author Dave Sieh
  * 
  */
-public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
+public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker, Protocols {
+
+	public void invoke(HTTPViewData viewData) {
+		String protocol = viewData.getProtocol();
+		Protocol oldProtocol = null;
+		HttpClient client = getClient();
+		HttpMethod method = null;
+		if (isStrictSSL() || HTTP.equals(protocol)) {
+			String url = viewData.getURL();
+			method = getMethod(url);
+		}
+		else {
+			oldProtocol = Protocol.getProtocol(HTTPS);
+			ProtocolSocketFactory newFactory = new EasySSLProtocolSocketFactory();
+			
+			String hostPort = viewData.getHostPort();
+			String[] hp = hostPort.split(":");
+			String host = hp[0];
+			String uri = "/" + viewData.getURI();
+			int port = 443;
+			if (hp.length > 1) {
+				try {
+					port = Integer.parseInt(hp[1]);
+				}
+				catch (NumberFormatException e) {
+					port = 443;
+				}
+			}
+			Protocol newProtocol = new Protocol("https", newFactory, 443);
+			Protocol.registerProtocol("https", newProtocol);
+			client.getHostConfiguration().setHost(
+					host,
+					port,
+					newProtocol);
+			method = getMethod(uri);
+		}
+		
+		populateMethodHeaders(method, viewData);
+		
+		try {
+			populateRequestEntity(method, viewData);
+		}
+		catch (Exception e1) {
+			Object[] arguments = { e1.getLocalizedMessage() };
+			viewData.showErrorMessage(MessageFormat.format(Messages.getString("PostMethodInvoker.EntityPopulationError") , arguments)); //$NON-NLS-1$
+		}
+
+		try {
+			@SuppressWarnings("unused")
+			int statusCode = client.executeMethod(method);
+			collectResponse(method, viewData);
+		}
+		catch (Exception e) {
+			Object[] arguments = { e.getLocalizedMessage() };
+			viewData.showErrorMessage(MessageFormat.format(Messages
+					.getString("GetMethodInvoker.InvocationError"), arguments)); //$NON-NLS-1$
+		}
+		finally {
+			method.releaseConnection();
+			if (oldProtocol != null) {
+				Protocol.registerProtocol("https", oldProtocol);
+			}
+		}
+	}
 
 	/**
 	 * Returns a configured HttpClient to the caller. This method will take all
@@ -48,6 +118,28 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker {
 		}
 
 		return client;
+	}
+	
+	/**
+	 * Called to return the method to use for the Http call. Derived classes
+	 * must implement this method.
+	 * 
+	 * @param uri the URI to use for the method call.
+	 * 
+	 * @return the appropriate HttpMethod implementation.
+	 */
+	protected abstract HttpMethod getMethod(String uri);
+	
+	/**
+	 * Populates the request entity for the method. The implementation at this
+	 * level assumes that the method has no request entity; derived classes 
+	 * should override this method to provide entity population functionality.
+	 * 
+	 * @param method the method to populate the request body for.
+	 * @param viewData the data with which to populate the entity.
+	 */
+	protected void populateRequestEntity(HttpMethod method, HTTPViewData viewData) throws UnsupportedEncodingException, FileNotFoundException {
+		// Does nothing; by design.
 	}
 	
 	/**

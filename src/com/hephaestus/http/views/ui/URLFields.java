@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.Protocols;
 import com.hephaestus.http.preferences.PreferenceConstants;
 
 /**
@@ -26,10 +27,10 @@ import com.hephaestus.http.preferences.PreferenceConstants;
  * 
  * @author Dave Sieh
  */
-public class URLFields extends Composite {
+public class URLFields extends Composite implements Protocols {
 
 	// The protocols loaded into the protocol drop-down
-	private static final String[] PROTOCOLS = { "http", "https" }; //$NON-NLS-1$ //$NON-NLS-2$
+	private static final String[] PROTOCOLS = { HTTP, HTTPS };
 
 	// The verbs loaded into the verb drop-down
 	private static final String[] VERBS = { "GET", "PUT", "POST", "DELETE" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
