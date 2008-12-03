@@ -142,6 +142,11 @@ public class RequestData extends Composite {
 
 	}
 	
+	/**
+	 * Creates the tab page for the File Upload entry.
+	 * 
+	 * @param tabs the parent tab folder.
+	 */
 	private void createRequestFileUpload(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
 		item.setText(Messages.getString("RequestData.FileUploadTabText")); //$NON-NLS-1$
@@ -198,6 +203,11 @@ public class RequestData extends Composite {
 		item.setControl(fields);
 	}
 	
+	/**
+	 * Creates the tab page for entry of bulk POST data.
+	 * 
+	 * @param tabs the parent tab folder.
+	 */
 	private void createRequestBulkPostData(TabFolder tabs) {
 		Composite cmp = new Composite(tabs, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -226,6 +236,11 @@ public class RequestData extends Composite {
 		item.setControl(cmp);
 	}
 	
+	/**
+	 * Creates the tab page for entry of field POST data.
+	 * 
+	 * @param tabs the parent tab folder.
+	 */
 	private void createRequestPostData(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
 		item.setText(Messages.getString("RequestData.POSTDataTabText")); //$NON-NLS-1$
@@ -269,6 +284,11 @@ public class RequestData extends Composite {
 		tvRequestPostData.setInput(nvpRequestPostData);
 	}
 
+	/**
+	 * Creates the tab page for the entry of HTTP request headers.
+	 * 
+	 * @param tabs the parent tab folder.
+	 */
 	private void createRequestHttpHeaders(TabFolder tabs) {
 		TabItem item = new TabItem(tabs, SWT.NONE);
 		item.setText(Messages.getString("RequestData.HTTPHeadersTabText")); //$NON-NLS-1$
@@ -331,6 +351,11 @@ public class RequestData extends Composite {
 		site.registerContextMenu(menuMgr, tvRequestPostData);
 	}
 	
+	/**
+	 * Sets the actions for the context menu.
+	 * 
+	 * @param manager the menu manager.
+	 */
 	private void fillContextMenu(IMenuManager manager) {
 		if (tblRequestHeaders.isFocusControl()) {
 			manager.add(insertNewRequestHeaderAction);
@@ -346,6 +371,9 @@ public class RequestData extends Composite {
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
+	/**
+	 * Constructs the actions
+	 */
 	private void makeActions() {
 		insertNewRequestHeaderAction = new InsertTableRowAction(
 				nvpRequestHeaders);
@@ -416,6 +444,9 @@ public class RequestData extends Composite {
 		}
 	}
 	
+	/**
+	 * Clears the inputs on the form(s)
+	 */
 	public final void clearInputs() {
 		nvpRequestHeaders.removeAll();
 		nvpRequestPostData.removeAll();

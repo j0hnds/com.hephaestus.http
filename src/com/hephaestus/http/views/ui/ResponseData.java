@@ -103,8 +103,6 @@ public class ResponseData extends Composite implements ResponseDataAccess {
 		});
 		Menu menu = menuMgr.createContextMenu(tfResultData);
 		tfResultData.setMenu(menu);
-//		tfResultData.
-//		site.registerContextMenu(menuMgr, tfResultData);
 
 	}
 	

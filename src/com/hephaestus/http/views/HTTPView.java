@@ -194,12 +194,20 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		requestData.setLayoutData(gd);
 	}
 
+	/**
+	 * Handle the setup of the local pull down and the local tool bar
+	 */
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
+	/**
+	 * Fills the local pull down menu.
+	 * 
+	 * @param manager pull down menu manager.
+	 */
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(invokeURLAction);
 		manager.add(new Separator());
@@ -207,6 +215,11 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		manager.add(exportURLAction);
 	}
 
+	/**
+	 * Fills the local tool bar
+	 * 
+	 * @param manager tool bar manager.
+	 */
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(invokeURLAction);
 		manager.add(new Separator());
@@ -214,6 +227,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		manager.add(exportURLAction);
 	}
 
+	/**
+	 * Creates the actions we need for this class.
+	 */
 	private void makeActions() {
 		invokeURLAction = new InvokeURLAction(this);
 		importURLAction = new ImportHttpRequestDataAction(this);
@@ -274,6 +290,9 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		}
 	}
 
+	/**
+	 * Resets the host ports field
+	 */
 	private void resetHostPorts() {
 		cmpURLFields.resetHostPorts();
 	}

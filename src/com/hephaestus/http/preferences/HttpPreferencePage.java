@@ -46,10 +46,15 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	// The column properties
 	private static final String[] COLUMN_PROPERTIES = { "NAME", "VALUE" }; //$NON-NLS-1$ //$NON-NLS-2$
 
+	// Table to display configured host/ports
 	private Table tblHostPorts;
+	// Edit field for proxy
 	private Text tfProxy;
+	// The name-value-list of hosts/ports (model for table)
 	private NameValuePairs nvpHostPorts;
+	// The Table viewer for the host ports.
 	private TableViewer tvHostPorts;
+	// Check box for strict SSL checking.
 	private Button btnStrictSSL;
 
 	/**
@@ -200,6 +205,9 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 
 	}
 
+	/**
+	 * Loads the value of the StrictSSL flag from the preference store.
+	 */
 	private void loadStrictSSL() {
 		IPreferenceStore store = getPreferenceStore();
 
@@ -276,6 +284,9 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		super.performDefaults();
 	}
 
+	/**
+	 * Loads the default value of the StrictSSL flag from the preference store. 
+	 */
 	private void loadDefaultStrictSSL() {
 		IPreferenceStore store = getPreferenceStore();
 

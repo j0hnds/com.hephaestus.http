@@ -23,7 +23,7 @@ public class Activator extends AbstractUIPlugin {
 	// The bean factory
 	private BeanFactory context;
 	
-	// Import/Export path
+	// Import/Export path. This value is cached for the life of the plugin.
 	private String importExportPath = "C:/"; //$NON-NLS-1$
 	
 	/**
@@ -58,6 +58,12 @@ public class Activator extends AbstractUIPlugin {
 		super.stop(context);
 	}
 	
+	/**
+	 * Returns an instance of a bean from the plugin's bean factory.
+	 * 
+	 * @param beanName the name of the bean to return.
+	 * @return reference to the instantiated bean.
+	 */
 	public static Object getBean(String beanName) {
 		return getDefault().getBeanFactory().getBean(beanName);
 	}
