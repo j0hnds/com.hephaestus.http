@@ -27,7 +27,7 @@ public class EasySSLProtocolSocketFactory implements
 	
     private static SSLContext createEasySSLContext() {
         try {
-            SSLContext context = SSLContext.getInstance("SSL");
+            SSLContext context = SSLContext.getInstance("SSL"); //$NON-NLS-1$
             context.init(
               null, 
               new TrustManager[] {new EasyX509TrustManager(null)}, 
@@ -77,7 +77,7 @@ public class EasySSLProtocolSocketFactory implements
 			int localPort, HttpConnectionParams params) throws IOException,
 			UnknownHostException, ConnectTimeoutException {
         if (params == null) {
-            throw new IllegalArgumentException("Parameters may not be null");
+            throw new IllegalArgumentException("Parameters may not be null"); //$NON-NLS-1$
         }
         int timeout = params.getConnectionTimeout();
         SocketFactory socketfactory = getSSLContext().getSocketFactory();

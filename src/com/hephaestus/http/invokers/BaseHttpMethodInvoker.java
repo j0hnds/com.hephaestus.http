@@ -48,9 +48,9 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker, Protoc
 			ProtocolSocketFactory newFactory = new EasySSLProtocolSocketFactory();
 			
 			String hostPort = viewData.getHostPort();
-			String[] hp = hostPort.split(":");
+			String[] hp = hostPort.split(":"); //$NON-NLS-1$
 			String host = hp[0];
-			String uri = "/" + viewData.getURI();
+			String uri = "/" + viewData.getURI(); //$NON-NLS-1$
 			int port = 443;
 			if (hp.length > 1) {
 				try {
@@ -60,8 +60,8 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker, Protoc
 					port = 443;
 				}
 			}
-			Protocol newProtocol = new Protocol("https", newFactory, 443);
-			Protocol.registerProtocol("https", newProtocol);
+			Protocol newProtocol = new Protocol(HTTPS, newFactory, 443);
+			Protocol.registerProtocol(HTTPS, newProtocol);
 			client.getHostConfiguration().setHost(
 					host,
 					port,
@@ -76,7 +76,7 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker, Protoc
 		}
 		catch (Exception e1) {
 			Object[] arguments = { e1.getLocalizedMessage() };
-			viewData.showErrorMessage(MessageFormat.format(Messages.getString("PostMethodInvoker.EntityPopulationError") , arguments)); //$NON-NLS-1$
+			viewData.showErrorMessage(MessageFormat.format(Messages.getString("BaseHttpMethodInvoker.EntityPopulationError") , arguments)); //$NON-NLS-1$
 		}
 
 		try {
@@ -87,12 +87,12 @@ public abstract class BaseHttpMethodInvoker implements HttpMethodInvoker, Protoc
 		catch (Exception e) {
 			Object[] arguments = { e.getLocalizedMessage() };
 			viewData.showErrorMessage(MessageFormat.format(Messages
-					.getString("GetMethodInvoker.InvocationError"), arguments)); //$NON-NLS-1$
+					.getString("BaseHttpMethodInvoker.InvocationError"), arguments)); //$NON-NLS-1$
 		}
 		finally {
 			method.releaseConnection();
 			if (oldProtocol != null) {
-				Protocol.registerProtocol("https", oldProtocol);
+				Protocol.registerProtocol(HTTPS, oldProtocol);
 			}
 		}
 	}

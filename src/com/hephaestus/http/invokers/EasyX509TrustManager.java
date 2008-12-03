@@ -49,7 +49,7 @@ public class EasyX509TrustManager implements X509TrustManager {
         factory.init(keystore);
         TrustManager[] trustmanagers = factory.getTrustManagers();
         if (trustmanagers.length == 0) {
-            throw new NoSuchAlgorithmException("no trust manager found");
+            throw new NoSuchAlgorithmException("no trust manager found"); //$NON-NLS-1$
         }
         this.standardTrustManager = (X509TrustManager)trustmanagers[0];
     }
