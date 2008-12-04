@@ -8,7 +8,6 @@ import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Activator;
 import com.hephaestus.http.Messages;
-import com.hephaestus.http.invokers.HttpMethodInvoker;
 import com.hephaestus.http.views.HTTPViewData;
 
 /**
@@ -44,10 +43,19 @@ public class InvokeURLAction extends Action {
 		
 		String verb = viewData.getVerb();
 		
-		HttpMethodInvoker invoker = null;
+//		HttpMethodInvoker invoker = null;
 		try {
-			invoker = (HttpMethodInvoker) Activator.getBean(verb);
-			invoker.invoke(viewData);
+//			invoker = (HttpMethodInvoker) Activator.getBean(verb);
+//			invoker.invoke(viewData);
+			if ("GET".equals(verb)) {
+				Activator.getDefault().invokeGetMethod(viewData);
+			} else if ("POST".equals(verb)) {
+				Activator.getDefault().invokePostMethod(viewData);
+			} else if ("PUT".equals(verb)) {
+				Activator.getDefault().invokePutMethod(viewData);
+			} else if ("DELETE".equals(verb)) {
+				Activator.getDefault().invokeDeleteMethod(viewData);
+			}
 		}
 		catch (Exception e) {
 			Object[] arguments = { verb, e.getLocalizedMessage() };
