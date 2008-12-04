@@ -46,6 +46,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		catch (Exception e) {
 			System.out.println(Messages.getString("Activator.ApplicationContextException")); //$NON-NLS-1$
+			e.printStackTrace();
 		}
 	}
 

@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.core.runtime.Preferences.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Rectangle;
@@ -426,4 +427,15 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 	public void setUploadName(String uploadName) {
 		requestData.setUploadName(uploadName);
 	}
+	public String getProxyHostPort() {
+		Preferences prefs = Activator.getDefault().getPluginPreferences();
+		
+		return prefs.getString(PreferenceConstants.P_PROXY_HOST_PORT);
+	}
+
+	public boolean isStrictSSL() {
+		Preferences prefs = Activator.getDefault().getPluginPreferences();
+		return prefs.getBoolean(PreferenceConstants.P_STRICT_SSL);
+	}
+
 }
