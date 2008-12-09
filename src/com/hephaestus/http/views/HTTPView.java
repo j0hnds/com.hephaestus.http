@@ -24,6 +24,7 @@ import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.HTTPViewData;
 import com.hephaestus.http.Messages;
 import com.hephaestus.http.actions.ExportHttpRequestDataAction;
 import com.hephaestus.http.actions.ImportHttpRequestDataAction;

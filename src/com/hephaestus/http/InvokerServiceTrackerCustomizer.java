@@ -4,8 +4,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-import com.hephaestus.http.invokers.HttpMethodInvoker;
-import com.hephaestus.http.views.HTTPViewData;
 
 public class InvokerServiceTrackerCustomizer implements
 		ServiceTrackerCustomizer, HttpMethodInvoker {

@@ -9,9 +9,9 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.HTTPViewData;
 import com.hephaestus.http.Messages;
 import com.hephaestus.http.adapters.File2View;
-import com.hephaestus.http.views.HTTPViewData;
 
 /**
  * This action is responsible for importing the data exported earlier.

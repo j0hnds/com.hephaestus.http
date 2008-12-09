@@ -7,8 +7,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.hephaestus.http.Activator;
+import com.hephaestus.http.HTTPViewData;
 import com.hephaestus.http.Messages;
-import com.hephaestus.http.views.HTTPViewData;
 
 /**
  * This action is responsible for making the URL call defined by the HTTP method 

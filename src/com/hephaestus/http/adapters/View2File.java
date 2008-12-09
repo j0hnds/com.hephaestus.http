@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.hephaestus.http.views.HTTPViewData;
+import com.hephaestus.http.HTTPViewData;
 import com.hephaestus.httpRequestData.BulkPostDataType;
 import com.hephaestus.httpRequestData.FileUploadType;
 import com.hephaestus.httpRequestData.HttpRequestDataDocument;

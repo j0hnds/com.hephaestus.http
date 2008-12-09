@@ -2,12 +2,9 @@ package com.hephaestus.http;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.hephaestus.http.invokers.HttpMethodInvoker;
-import com.hephaestus.http.views.HTTPViewData;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -46,23 +43,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
-		/**
-		 * Massive Hack. This is just a trick to get the invoker bundle
-		 * started. Apparently within Eclipse, the activator won't be fired
-		 * until someone loads a class from the bundle. That kind of defeats
-		 * the whole purpose of making the invoker bundle a service in the
-		 * first place.
-		 * 
-		 * This will remain until we figure out how to start the invoker
-		 * bundle without having to do a class load.
-		 */
-		Bundle[] bundles = context.getBundles();
-		for (Bundle bundle : bundles) {
-			if ("com.hephaestus.invoker".equals(bundle.getSymbolicName())) {
-				bundle.start();
-			}
-		}
 		
 		setUpServiceTrackers(context);
 	}

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.bea.xml.XmlException;
-import com.hephaestus.http.views.HTTPViewData;
+import com.hephaestus.http.HTTPViewData;
 import com.hephaestus.httpRequestData.BulkPostDataType;
 import com.hephaestus.httpRequestData.FileUploadType;
 import com.hephaestus.httpRequestData.HttpRequestDataDocument;
