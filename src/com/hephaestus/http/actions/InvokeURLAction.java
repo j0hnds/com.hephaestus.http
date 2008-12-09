@@ -47,13 +47,13 @@ public class InvokeURLAction extends Action {
 		try {
 //			invoker = (HttpMethodInvoker) Activator.getBean(verb);
 //			invoker.invoke(viewData);
-			if ("GET".equals(verb)) {
+			if ("GET".equals(verb)) { //$NON-NLS-1$
 				Activator.getDefault().invokeGetMethod(viewData);
-			} else if ("POST".equals(verb)) {
+			} else if ("POST".equals(verb)) { //$NON-NLS-1$
 				Activator.getDefault().invokePostMethod(viewData);
-			} else if ("PUT".equals(verb)) {
+			} else if ("PUT".equals(verb)) { //$NON-NLS-1$
 				Activator.getDefault().invokePutMethod(viewData);
-			} else if ("DELETE".equals(verb)) {
+			} else if ("DELETE".equals(verb)) { //$NON-NLS-1$
 				Activator.getDefault().invokeDeleteMethod(viewData);
 			}
 		}

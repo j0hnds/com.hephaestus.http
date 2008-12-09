@@ -34,7 +34,7 @@ public class InvokerServiceTrackerCustomizer implements
 	
 	public void invoke(HTTPViewData viewData) {
 		if (invoker == null) {
-			throw new IllegalStateException("Requested Service not registered");
+			throw new IllegalStateException("Requested Service not registered"); //$NON-NLS-1$
 		}
 		
 		invoker.invoke(viewData);

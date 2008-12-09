@@ -58,10 +58,10 @@ public class Activator extends AbstractUIPlugin {
 		putInvoker = putIstc;
 		deleteInvoker = deleteIstc;
 		
-		getTracker = new ServiceTracker(context, context.createFilter(createFilterString("GET")), getIstc);
-		postTracker = new ServiceTracker(context, context.createFilter(createFilterString("POST")), postIstc);
-		putTracker = new ServiceTracker(context, context.createFilter(createFilterString("PUT")), putIstc);
-		deleteTracker = new ServiceTracker(context, context.createFilter(createFilterString("DELETE")), deleteIstc);
+		getTracker = new ServiceTracker(context, context.createFilter(createFilterString("GET")), getIstc); //$NON-NLS-1$
+		postTracker = new ServiceTracker(context, context.createFilter(createFilterString("POST")), postIstc); //$NON-NLS-1$
+		putTracker = new ServiceTracker(context, context.createFilter(createFilterString("PUT")), putIstc); //$NON-NLS-1$
+		deleteTracker = new ServiceTracker(context, context.createFilter(createFilterString("DELETE")), deleteIstc); //$NON-NLS-1$
 		
 		///Filter obj = null;
 		
@@ -73,12 +73,12 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	private String createFilterString(String verb) {
-		StringBuilder sb = new StringBuilder("(&");
-		sb.append("(objectclass=");
+		StringBuilder sb = new StringBuilder("(&"); //$NON-NLS-1$
+		sb.append("(objectclass="); //$NON-NLS-1$
 		sb.append(HttpMethodInvoker.class.getName());
-		sb.append(")(METHOD=");
+		sb.append(")(METHOD="); //$NON-NLS-1$
 		sb.append(verb);
-		sb.append("))");
+		sb.append("))"); //$NON-NLS-1$
 		
 		return sb.toString();
 	}
@@ -138,28 +138,28 @@ public class Activator extends AbstractUIPlugin {
 	
 	public void invokeGetMethod(HTTPViewData viewData) {
 		if (getInvoker == null) {
-			throw new IllegalStateException("GetInvoker is not yet instantiated");
+			throw new IllegalStateException("GetInvoker is not yet instantiated"); //$NON-NLS-1$
 		}
 		
 		getInvoker.invoke(viewData);
 	}
 	public void invokePostMethod(HTTPViewData viewData) {
 		if (postInvoker == null) {
-			throw new IllegalStateException("PostInvoker is not yet instantiated");
+			throw new IllegalStateException("PostInvoker is not yet instantiated"); //$NON-NLS-1$
 		}
 		
 		postInvoker.invoke(viewData);
 	}
 	public void invokePutMethod(HTTPViewData viewData) {
 		if (putInvoker == null) {
-			throw new IllegalStateException("PutInvoker is not yet instantiated");
+			throw new IllegalStateException("PutInvoker is not yet instantiated"); //$NON-NLS-1$
 		}
 		
 		putInvoker.invoke(viewData);
 	}
 	public void invokeDeleteMethod(HTTPViewData viewData) {
 		if (deleteInvoker == null) {
-			throw new IllegalStateException("DeleteInvoker is not yet instantiated");
+			throw new IllegalStateException("DeleteInvoker is not yet instantiated"); //$NON-NLS-1$
 		}
 		
 		getInvoker.invoke(viewData);
