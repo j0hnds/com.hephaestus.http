@@ -43,10 +43,7 @@ public class InvokeURLAction extends Action {
 		
 		String verb = viewData.getVerb();
 		
-//		HttpMethodInvoker invoker = null;
 		try {
-//			invoker = (HttpMethodInvoker) Activator.getBean(verb);
-//			invoker.invoke(viewData);
 			if ("GET".equals(verb)) { //$NON-NLS-1$
 				Activator.getDefault().invokeGetMethod(viewData);
 			} else if ("POST".equals(verb)) { //$NON-NLS-1$
