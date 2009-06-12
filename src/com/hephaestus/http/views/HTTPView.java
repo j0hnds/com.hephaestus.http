@@ -434,6 +434,18 @@ public class HTTPView extends ViewPart implements HTTPViewData,
 		return prefs.getString(PreferenceConstants.P_PROXY_HOST_PORT);
 	}
 
+    public int getConnectionTimeout() {
+        Preferences prefs = Activator.getDefault().getPluginPreferences();
+        
+        return prefs.getInt(PreferenceConstants.P_CONNECTION_TIMEOUT);
+    }
+
+    public int getSocketTimeout() {
+        Preferences prefs = Activator.getDefault().getPluginPreferences();
+        
+        return prefs.getInt(PreferenceConstants.P_SOCKET_TIMEOUT);
+    }
+
 	public boolean isStrictSSL() {
 		Preferences prefs = Activator.getDefault().getPluginPreferences();
 		return prefs.getBoolean(PreferenceConstants.P_STRICT_SSL);

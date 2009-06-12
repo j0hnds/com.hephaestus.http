@@ -50,6 +50,10 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	private Table tblHostPorts;
 	// Edit field for proxy
 	private Text tfProxy;
+	// Edit field for connection timeout
+	private Text tfConnectionTimeout;
+    // Edit field for socket timeout
+    private Text tfSocketTimeout;
 	// The name-value-list of hosts/ports (model for table)
 	private NameValuePairs nvpHostPorts;
 	// The Table viewer for the host ports.
@@ -200,6 +204,30 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 		btnStrictSSL.setLayoutData(gd);
 		
 		loadStrictSSL();
+		
+		Label lblConnectionTimeout = new Label(parent, SWT.NONE);
+		lblConnectionTimeout.setText(Messages.getString("HttpPreferencePage.ConnectionTimeoutLabel")); //$NON-NLS-1$
+		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		lblConnectionTimeout.setLayoutData(gd);
+		
+		tfConnectionTimeout = new Text(parent, SWT.BORDER | SWT.SINGLE);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		tfConnectionTimeout.setLayoutData(gd);
+		
+        Label lblPlaceholder2 = new Label(parent, SWT.NONE);
+        gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+        lblPlaceholder2.setLayoutData(gd);
+
+        Label lblSocketTimeout = new Label(parent, SWT.NONE);
+        lblSocketTimeout.setText(Messages.getString("HttpPreferencePage.SocketTimeoutLabel")); //$NON-NLS-1$
+        gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+        lblSocketTimeout.setLayoutData(gd);
+        
+        tfSocketTimeout = new Text(parent, SWT.BORDER | SWT.SINGLE);
+        gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        tfSocketTimeout.setLayoutData(gd);
+        
+		loadConnectionTimeout();
 
 		parent.pack();
 
@@ -208,13 +236,28 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 	/**
 	 * Loads the value of the StrictSSL flag from the preference store.
 	 */
-	private void loadStrictSSL() {
+	private void loadConnectionTimeout() {
 		IPreferenceStore store = getPreferenceStore();
 
-		boolean strict = store.getBoolean(PreferenceConstants.P_STRICT_SSL);
+		int timeoutValue = store.getInt(PreferenceConstants.P_CONNECTION_TIMEOUT);
 		
-		btnStrictSSL.setSelection(strict);
+		tfConnectionTimeout.setText(Integer.toString(timeoutValue));
+		
+		timeoutValue = store.getInt(PreferenceConstants.P_SOCKET_TIMEOUT);
+		
+		tfSocketTimeout.setText(Integer.toString(timeoutValue));
 	}
+
+    /**
+     * Loads the value of the StrictSSL flag from the preference store.
+     */
+    private void loadStrictSSL() {
+        IPreferenceStore store = getPreferenceStore();
+
+        boolean strict = store.getBoolean(PreferenceConstants.P_STRICT_SSL);
+        
+        btnStrictSSL.setSelection(strict);
+    }
 
 	/**
 	 * Loads the proxy information from the preferences.
@@ -326,6 +369,28 @@ public class HttpPreferencePage extends FieldEditorPreferencePage implements
 				.setValue(PreferenceConstants.P_PROXY_HOST_PORT, tfProxy
 						.getText());
 		store.setValue(PreferenceConstants.P_STRICT_SSL, btnStrictSSL.getSelection());
+		
+		String value = tfConnectionTimeout.getText();
+		if (value != null && value.length() > 0) {
+		    int iValue = 0;
+		    try {
+		        iValue = Integer.parseInt(value);
+		        store.setValue(PreferenceConstants.P_CONNECTION_TIMEOUT, iValue);
+		    } catch (NumberFormatException e) {
+		        // Ignore it...
+		    }
+		}
+
+		value = tfSocketTimeout.getText();
+        if (value != null && value.length() > 0) {
+            int iValue = 0;
+            try {
+                iValue = Integer.parseInt(value);
+                store.setValue(PreferenceConstants.P_SOCKET_TIMEOUT, iValue);
+            } catch (NumberFormatException e) {
+                // Ignore it...
+            }
+        }
 
 		return super.performOk();
 	}

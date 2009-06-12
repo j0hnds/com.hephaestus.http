@@ -20,6 +20,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_HOST_PORTS, "localhost:80"); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_PROXY_HOST_PORT, ""); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_STRICT_SSL, true);
+		store.setDefault(PreferenceConstants.P_CONNECTION_TIMEOUT, 0);
+        store.setDefault(PreferenceConstants.P_SOCKET_TIMEOUT, 0);
 	}
 
 }
